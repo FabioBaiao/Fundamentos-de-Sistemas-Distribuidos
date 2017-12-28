@@ -1,3 +1,6 @@
+import Communication.*;
+import Log.*;
+import io.atomix.catalyst.concurrent.Futures;
 import io.atomix.catalyst.concurrent.SingleThreadContext;
 import io.atomix.catalyst.concurrent.ThreadContext;
 import io.atomix.catalyst.serializer.Serializer;
@@ -38,7 +41,7 @@ public class Coordinator {
     }
 
     private void init() {
-        registerSerializers();
+        Common.registerSerializers(tc);
 
         rpcLogHandlers();
         twoPhaseCommitLogHandlers();
@@ -73,16 +76,16 @@ public class Coordinator {
         }
     }
 
-    private TransactionInfo begin(int client) {
+    private int begin() {
         // para não sobrepor
         while (activeTransactions.containsKey(transactionIdCounter.incrementAndGet()));
 
         int xid = transactionIdCounter.get();
 
-        TransactionInfo transaction = new TransactionInfo(xid, client);
+        TransactionInfo transaction = new TransactionInfo(xid);
 
         try {
-            int index = tc.execute(() -> l.append(new Begin(xid, client))).join().get();
+            int index = tc.execute(() -> l.append(new BeginLog(xid))).join().get();
 
             transaction.addIndex(index);
             indexesInUse.add(index);
@@ -93,13 +96,13 @@ public class Coordinator {
 
         activeTransactions.put(xid, transaction);
 
-        return transaction;
+        return xid;
     }
 
     private void addParticipant(TransactionInfo transaction, int participant) {
         try {
             int index = tc.execute(() ->
-                    l.append(new Participant(transaction.id, participant))
+                    l.append(new ResourceLog(transaction.id, participant))
             ).join().get();
 
             transaction.addIndex(index);
@@ -115,37 +118,34 @@ public class Coordinator {
     private void sendPrepares(TransactionInfo transaction) {
         for (int participant : transaction.participants) {
             tc.execute(() -> {
-                c.send(participant, new Prepare(transaction.id));
+                c.send(participant, new PrepareComm(transaction.id));
             });
         }
     }
 
     private void prepare(TransactionInfo transaction) {
-        int index = 0;
         try {
-            index = tc.execute(() ->
+            int index = tc.execute(() ->
                     l.append(new Preparing(transaction.id, transaction.participants))
             ).join().get();
+
+            transaction.addIndex(index);
+            indexesInUse.add(index);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
-        transaction.addIndex(index);
-        indexesInUse.add(index);
 
         sendPrepares(transaction);
     }
 
     private void commit(TransactionInfo transaction) {
 
-        // adicionar marcador no inicio ou no fim ??
-        // tem de ser adicionado, pois não é garantido que o preparing seja removido
         tc.execute(() -> {
             l.append(new Commit(transaction.id));
         });
         for (int i : transaction.prepared) {
             tc.execute(() -> {
-                c.send(i, new Commit(transaction.id));
+                c.send(i, new CommitComm(transaction.id));
             });
         }
 
@@ -161,7 +161,7 @@ public class Coordinator {
         });
         for (int i : transaction.participants) {
             tc.execute(() -> {
-                c.send(i, new Rollback(transaction.id));
+                c.send(i, new RollbackComm(transaction.id));
             });
         }
 
@@ -211,11 +211,11 @@ public class Coordinator {
     }
 
     private void twoPhaseCommitCliqueHandlers() {
-        c.handler(Ok.class, (from, recv) -> {
+        c.handler(OkComm.class, (from, recv) -> {
             TransactionInfo transaction = activeTransactions.get(recv.xid);
             if (transaction == null) {
                 tc.execute(() -> {
-                    c.send(from, new Rollback(recv.xid));
+                    c.send(from, new RollbackComm(recv.xid));
                 });
             }
             else {
@@ -225,11 +225,11 @@ public class Coordinator {
             }
         });
 
-        c.handler(NotOk.class, (from, recv) ->  {
+        c.handler(NotOkComm.class, (from, recv) ->  {
             TransactionInfo transaction = activeTransactions.get(recv.xid);
             if (transaction == null) {
                 tc.execute(() -> {
-                    c.send(from, new Rollback(recv.xid));
+                    c.send(from, new RollbackComm(recv.xid));
                 });
             }
             else {
@@ -240,17 +240,17 @@ public class Coordinator {
 
     private void rpcLogHandlers() {
 
-        l.handler(Begin.class, (index, p) -> {
-            System.out.println("Begin found");
-            TransactionInfo transaction = new TransactionInfo(p.xid, p.client);
+        l.handler(BeginLog.class, (index, p) -> {
+            System.out.println("BeginLog found");
+            TransactionInfo transaction = new TransactionInfo(p.xid);
             activeTransactions.put(p.xid, transaction);
 
             transaction.addIndex(index);
             indexesInUse.add(index);
         });
 
-        l.handler(Participant.class, (index, p) -> {
-            System.out.println("Participant found");
+        l.handler(ResourceLog.class, (index, p) -> {
+            System.out.println("Log.ResourceLog found");
             TransactionInfo transaction = activeTransactions.get(p.xid);
             transaction.addParticipant(p.participant);
 
@@ -260,7 +260,8 @@ public class Coordinator {
     }
 
     private void rpcCliqueHandlers() {
-        c.handler(AddResource.class, (from, recv) -> {
+        c.handler(AddResourceComm.class, (from, recv) -> {
+
             TransactionInfo transaction = activeTransactions.get(recv.xid);
             addParticipant(transaction, from);
             // send what??
@@ -270,42 +271,15 @@ public class Coordinator {
     private void rpcClientHandlers() {
         t.server().listen(address, connection -> {
 
-            connection.handler(Begin.class, (recv) -> {
-                TransactionInfo transaction = begin(recv.client);
-                // send context
+            connection.handler(BeginComm.class, (recv) -> {
+                return Futures.completedFuture(begin());
             });
 
             connection.handler(Commit.class, (recv) -> {
                 TransactionInfo transaction = activeTransactions.get(recv.xid);
                 prepare(transaction);
-                // send confirmation ??
             });
         });
-    }
-
-    private void registerSerializers() {
-        tc.serializer()
-                .register(Abort.class)
-                .register(Begin.class)
-                .register(Commit.class)
-                .register(NotOk.class)
-                .register(Ok.class)
-                .register(Participant.class)
-                .register(Prepare.class)
-                .register(Prepared.class)
-                .register(Preparing.class)
-                .register(Rollback.class);
-    }
-
-    private void testTwoPhaseCommit() {
-        // initialization
-        TransactionInfo transaction = begin(-1);
-        for (int i = 1; i < 3; i++) {
-            addParticipant(transaction, i);
-        }
-
-        //client commites
-        prepare(transaction);
     }
 
     public static void main(String[] args) {
@@ -320,9 +294,5 @@ public class Coordinator {
         Coordinator c = new Coordinator(addresses, id);
 
         c.init();
-
-
-        c.testTwoPhaseCommit();
-
     }
 }

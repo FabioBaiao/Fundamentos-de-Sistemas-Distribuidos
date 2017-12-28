@@ -1,15 +1,17 @@
+package Log;
+
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class NotOk implements CatalystSerializable{
 
-    int xid;
+public class BeginLog implements CatalystSerializable{
+    public int xid;
 
-    public NotOk() {}
+    BeginLog() {}
 
-    public NotOk(int xid) {
+    public BeginLog(int xid) {
         this.xid = xid;
     }
 

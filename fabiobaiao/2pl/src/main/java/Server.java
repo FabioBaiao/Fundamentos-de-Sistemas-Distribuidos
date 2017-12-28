@@ -1,3 +1,5 @@
+import Communication.*;
+import io.atomix.catalyst.concurrent.Futures;
 import io.atomix.catalyst.concurrent.SingleThreadContext;
 import io.atomix.catalyst.concurrent.ThreadContext;
 import io.atomix.catalyst.serializer.Serializer;
@@ -7,9 +9,7 @@ import io.atomix.catalyst.transport.netty.NettyTransport;
 import pt.haslab.ekit.Clique;
 import pt.haslab.ekit.Log;
 
-import javax.sound.midi.SysexMessage;
-import java.util.Random;
-import java.util.concurrent.CompletableFuture;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class Server {
@@ -28,19 +28,13 @@ public class Server {
         Clique c = new Clique(t, id, addresses);
         Log l = new Log("" + id);
 
+        Map<Integer, TransactionChanges> activeTransactions = new HashMap<>();
+
+
+
         Random r = new Random();
 
-        tc.serializer()
-                .register(Abort.class)
-                .register(Begin.class)
-                .register(Commit.class)
-                .register(NotOk.class)
-                .register(Ok.class)
-                .register(Participant.class)
-                .register(Prepare.class)
-                .register(Prepared.class)
-                .register(Preparing.class)
-                .register(Rollback.class);
+        Common.registerSerializers(tc);
 
         tc.execute(() -> {
             l.handler(Abort.class, (i, m) -> {
@@ -56,10 +50,8 @@ public class Server {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        System.out.println("Log opened");
 
-        c.handler(Prepare.class, (from, recv) -> {
-            System.out.println("Preparing");
+        c.handler(PrepareComm.class, (from, recv) -> {
             switch (r.nextInt(3)) {
                 case 0:
                 case 1:
@@ -68,33 +60,57 @@ public class Server {
                         l.append(new Prepared(recv.xid));
                     });
                     tc.execute(() -> {
-                        c.send(from, new Ok(recv.xid));
+                        c.send(from, new OkComm(recv.xid));
                     });
                     break;
                 case 2:
-                    // necessário ??
                     tc.execute(() -> {
                         l.append(new Abort(recv.xid));
                     });
                     tc.execute(() -> {
-                        c.send(from, new NotOk(recv.xid));
+                        c.send(from, new NotOkComm(recv.xid));
                     });
+                    // recover initial status
+                    // release locks of transaction
                     break;
             }
         });
 
-        c.handler(Commit.class, (from, recv) -> {
+        c.handler(CommitComm.class, (from, recv) -> {
             tc.execute(() -> {
                 l.append(new Commit(recv.xid));
             });
             System.out.println("Commit");
         });
 
-        c.handler(Rollback.class, (from, recv) -> {
+        c.handler(RollbackComm.class, (from, recv) -> {
             tc.execute(() -> {
                 l.append(new Abort(recv.xid));
             });
+            // recover initial status
+            // release locks of transaction
             System.out.println("Abort");
+        });
+
+        tc.execute(() -> {
+            t.server().listen(addresses[id], connection -> {
+
+                connection.handler(MethodCall.class, (recv) -> {
+
+                    TransactionChanges transaction = activeTransactions.get(recv.xid);
+                    if (transaction == null) {
+                        transaction = new TransactionChanges(recv.xid);
+                        activeTransactions.put(recv.xid, transaction);
+
+                        c.send(0, new AddResourceComm(recv.xid));
+                    }
+                    // method
+                    // append initial status of each modified object
+                    // lock used objects
+
+                    return Futures.completedFuture(null);
+                });
+            });
         });
 
         tc.execute(() -> c.open());

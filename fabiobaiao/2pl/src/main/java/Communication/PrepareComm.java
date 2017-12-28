@@ -1,15 +1,17 @@
+package Communication;
+
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class Prepare implements CatalystSerializable{
+public class PrepareComm implements CatalystSerializable{
 
-    int xid;
+    public int xid;
 
-    public Prepare() {}
+    public PrepareComm() {}
 
-    Prepare(int xid){
+    public PrepareComm(int xid){
         this.xid = xid;
     }
 

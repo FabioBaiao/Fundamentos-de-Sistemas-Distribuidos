@@ -1,16 +1,18 @@
+package Communication;
+
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class Rollback implements CatalystSerializable {
+public class NotOkComm implements CatalystSerializable{
 
-    int xid;
+    public int xid;
 
-    public Rollback() {}
+    public NotOkComm() {}
 
-    public Rollback(int transId) {
-        this.xid = transId;
+    public NotOkComm(int xid) {
+        this.xid = xid;
     }
 
     @Override

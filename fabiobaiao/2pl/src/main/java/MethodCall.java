@@ -3,13 +3,14 @@ import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class Ok implements CatalystSerializable{
+public class MethodCall implements CatalystSerializable{
 
-    int xid;
+    public int xid;
 
-    Ok() {}
+    public MethodCall() {}
 
-    Ok(int xid){
+
+    public MethodCall(int xid) {
         this.xid = xid;
     }
 
