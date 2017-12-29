@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionChanges {
@@ -7,5 +8,6 @@ public class TransactionChanges {
 
     public TransactionChanges(int xid) {
         this.xid = xid;
+        this.changed = new ArrayList<>();
     }
 }

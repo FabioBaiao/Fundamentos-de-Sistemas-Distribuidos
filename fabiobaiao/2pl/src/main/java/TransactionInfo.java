@@ -1,41 +1,43 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TransactionInfo {
 
     private int client;
-    List<Integer> participants;
+    Set<Integer> participants;
 
-    List<Integer> prepared;
+    Set<Integer> prepared;
     public List<Integer> indexes;
     public int id;
 
     Status status;
 
     public TransactionInfo() {
-        this.participants = new ArrayList<>();
-        this.prepared = new ArrayList<>();
+        this.participants = new HashSet<>();
+        this.prepared = new HashSet<>();
     }
 
     public TransactionInfo(int id) {
         this.id = id;
-        this.participants = new ArrayList<>();
-        this.prepared = new ArrayList<>();
+        this.participants = new HashSet<>();
+        this.prepared = new HashSet<>();
     }
 
     public TransactionInfo(int id, List<Integer> participants) {
         this.id = id;
         this.participants = participants;
-        this.prepared = new ArrayList<>();
+        this.prepared = new HashSet<>();
     }
 
     public TransactionInfo(int xid, int client) {
         this.id = xid;
         this.client = client;
         this.status = Status.RUNNING;
-        this.participants = new ArrayList<>();
-        this.prepared = new ArrayList<>();
-        this.indexes = new ArrayList<>();
+        this.participants = new HashSet<>();
+        this.prepared = new HashSet<>();
+        this.indexes = new HashSet<>();
     }
 
     public boolean allPrepared() {

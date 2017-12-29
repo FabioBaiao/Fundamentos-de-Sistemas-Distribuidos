@@ -1,4 +1,5 @@
 import Communication.*;
+import Log.*;
 import io.atomix.catalyst.concurrent.Futures;
 import io.atomix.catalyst.concurrent.SingleThreadContext;
 import io.atomix.catalyst.concurrent.ThreadContext;
@@ -31,7 +32,6 @@ public class Server {
         Map<Integer, TransactionChanges> activeTransactions = new HashMap<>();
 
 
-
         Random r = new Random();
 
         Common.registerSerializers(tc);
@@ -39,9 +39,9 @@ public class Server {
         tc.execute(() -> {
             l.handler(Abort.class, (i, m) -> {
             });
-            l.handler(Commit.class, (i, m) -> {
+            l.handler(CommitLog.class, (i, m) -> {
             });
-            l.handler(Prepared.class, (i, m) -> {
+            l.handler(PreparedLog.class, (i, m) -> {
             });
         });
 
@@ -52,35 +52,58 @@ public class Server {
         }
 
         c.handler(PrepareComm.class, (from, recv) -> {
-            switch (r.nextInt(3)) {
-                case 0:
-                case 1:
-                    // ordem ??
-                    tc.execute(() -> {
-                        l.append(new Prepared(recv.xid));
-                    });
-                    tc.execute(() -> {
-                        c.send(from, new OkComm(recv.xid));
-                    });
-                    break;
-                case 2:
-                    tc.execute(() -> {
-                        l.append(new Abort(recv.xid));
-                    });
+            TransactionChanges transaction = activeTransactions.get(recv.xid);
+            if (transaction == null) {
+                // Não conhecer uma transação em que participou significa que esta deve abortar
+                try {
+                    tc.execute(() ->
+                        l.append(new Abort(recv.xid))
+                    ).join().get();
                     tc.execute(() -> {
                         c.send(from, new NotOkComm(recv.xid));
                     });
-                    // recover initial status
-                    // release locks of transaction
-                    break;
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                try {
+                    tc.execute(() ->
+                        // add changes
+                        l.append(new PreparedLog(recv.xid, new ArrayList<>()))
+                    ).join().get();
+                    tc.execute(() -> {
+                        c.send(from, new OkComm(recv.xid));
+                    });
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         c.handler(CommitComm.class, (from, recv) -> {
-            tc.execute(() -> {
-                l.append(new Commit(recv.xid));
-            });
-            System.out.println("Commit");
+            if (activeTransactions.containsKey(recv.xid)) {
+                try {
+                    tc.execute(() ->
+                        l.append(new CommitLog(recv.xid))
+                    ).join().get();
+
+                    tc.execute(() -> {
+                        c.send(from, new CommitedComm(recv.xid));
+                    });
+                    // persistir alterações ??
+                    // libertar locks
+                    // terminar transação
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                // Commit já foi feito
+                tc.execute(() -> {
+                    c.send(from, new CommitedComm(recv.xid));
+                });
+            }
         });
 
         c.handler(RollbackComm.class, (from, recv) -> {
@@ -99,13 +122,24 @@ public class Server {
 
                     TransactionChanges transaction = activeTransactions.get(recv.xid);
                     if (transaction == null) {
-                        transaction = new TransactionChanges(recv.xid);
-                        activeTransactions.put(recv.xid, transaction);
 
-                        c.send(0, new AddResourceComm(recv.xid));
+                        try {
+                            Object o = c.sendAndReceive(0, new AddResourceComm(recv.xid)).get();
+
+                            if (o instanceof RollbackComm) {
+                                return Futures.completedFuture(new RollbackComm(recv.xid));
+                            }
+
+                            transaction = new TransactionChanges(recv.xid);
+                            activeTransactions.put(recv.xid, transaction);
+
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
                     }
+
                     // method
-                    // append initial status of each modified object
+                    // append initial status of each modified object ??
                     // lock used objects
 
                     return Futures.completedFuture(null);

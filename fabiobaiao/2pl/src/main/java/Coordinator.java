@@ -126,7 +126,7 @@ public class Coordinator {
     private void prepare(TransactionInfo transaction) {
         try {
             int index = tc.execute(() ->
-                    l.append(new Preparing(transaction.id, transaction.participants))
+                    l.append(new PreparingLog(transaction.id))
             ).join().get();
 
             transaction.addIndex(index);
@@ -140,16 +140,19 @@ public class Coordinator {
 
     private void commit(TransactionInfo transaction) {
 
-        tc.execute(() -> {
-            l.append(new Commit(transaction.id));
-        });
-        for (int i : transaction.prepared) {
-            tc.execute(() -> {
-                c.send(i, new CommitComm(transaction.id));
-            });
-        }
+        try {
+            tc.execute(() ->
+                l.append(new CommittingLog(transaction.id))
+            ).join().get();
 
-        removeTransaction(transaction);
+            for (int i : transaction.prepared) {
+                tc.execute(() -> {
+                    c.send(i, new CommitComm(transaction.id));
+                });
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -188,8 +191,8 @@ public class Coordinator {
 
     private void twoPhaseCommitLogHandlers() {
 
-        l.handler(Preparing.class, (index, p) -> {
-            System.out.println("Preparing found");
+        l.handler(PreparingLog.class, (index, p) -> {
+            System.out.println("Log.PreparingLog found");
             TransactionInfo transaction = activeTransactions.get(p.xid);
             transaction.setPreparing();
 
@@ -197,8 +200,8 @@ public class Coordinator {
             indexesInUse.add(index);
         });
 
-        l.handler(Commit.class, (index, p) -> {
-            System.out.println("Commit found");
+        l.handler(CommitLog.class, (index, p) -> {
+            System.out.println("Log.CommitLog found");
             TransactionInfo transaction = activeTransactions.get(p.xid);
             removeTransaction(transaction);
         });
@@ -214,6 +217,7 @@ public class Coordinator {
         c.handler(OkComm.class, (from, recv) -> {
             TransactionInfo transaction = activeTransactions.get(recv.xid);
             if (transaction == null) {
+                // Transação pode ser apagada se decisão for rollback??
                 tc.execute(() -> {
                     c.send(from, new RollbackComm(recv.xid));
                 });
@@ -234,6 +238,17 @@ public class Coordinator {
             }
             else {
                 rollback(transaction);
+            }
+        });
+
+        c.handler(CommitedComm.class, (from, recv) -> {
+            TransactionInfo transaction = activeTransactions.get(recv.xid);
+            if (transaction == null) {
+                // Coordenador falhar depois de enviar commits, portanto vai reenvia-los
+                // Nunca acontece
+            }
+            else {
+                removeTransaction(transaction);
             }
         });
     }
@@ -262,9 +277,21 @@ public class Coordinator {
     private void rpcCliqueHandlers() {
         c.handler(AddResourceComm.class, (from, recv) -> {
 
+            Object r;
+
             TransactionInfo transaction = activeTransactions.get(recv.xid);
-            addParticipant(transaction, from);
-            // send what??
+            if (transaction == null) {
+                /*
+                * para receber um AddResource é necessário que o begin() do cliente tenha completado com sucesso
+                * se o coordenador falhar vai descartar todas as transações iniciadas que não estejam em 2PC
+                * portanto tem de se avisar o participante para fazer rollback
+                * */
+                return Futures.completedFuture(new RollbackComm(recv.xid));
+            } else {
+                addParticipant(transaction, from);
+                // Confirmação
+                return Futures.completedFuture(new Object());
+            }
         });
     }
 
@@ -275,9 +302,23 @@ public class Coordinator {
                 return Futures.completedFuture(begin());
             });
 
-            connection.handler(Commit.class, (recv) -> {
+            connection.handler(CommitComm.class, (recv) -> {
+                Object r;
+
                 TransactionInfo transaction = activeTransactions.get(recv.xid);
-                prepare(transaction);
+                if (transaction == null) {
+                    /*
+                    * para receber um CommitComm é necessário que o begin() do cliente tenha completado com sucesso
+                    * todos os participantes registados desta transação já foram avisados para fazer rollback (a partir do Log)
+                    * avisar cliente que não é possivel fazer commit
+                    * */
+                    return Futures.completedFuture(new RollbackComm(recv.xid));
+                }
+                else {
+                    prepare(transaction);
+                    // return só devia ser final
+                    return Futures.completedFuture(null);
+                }
             });
         });
     }

@@ -1,3 +1,5 @@
+package Log;
+
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
@@ -6,24 +8,24 @@ import io.atomix.catalyst.serializer.Serializer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Preparing implements CatalystSerializable {
+public class PreparedLog implements CatalystSerializable{
 
     int xid;
-    List<Integer> participants;
+    List<Object> changes;
 
-    public Preparing() {}
+    public PreparedLog() {}
 
-    public Preparing(int xid, List<Integer> participants) {
+    public PreparedLog(int xid, List<Object> changes) {
         this.xid = xid;
-        this.participants = participants;
+        this.changes = changes;
     }
 
     @Override
     public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {
         bufferOutput.writeInt(xid);
-        bufferOutput.writeInt(participants.size());
-        for (int participant : participants) {
-            bufferOutput.writeInt(participant);
+        bufferOutput.writeInt(changes.size());
+        for (Object o : changes) {
+            serializer.writeObject(o, bufferOutput);
         }
     }
 
@@ -31,9 +33,8 @@ public class Preparing implements CatalystSerializable {
     public void readObject(BufferInput<?> bufferInput, Serializer serializer) {
         xid = bufferInput.readInt();
         int size = bufferInput.readInt();
-        participants = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            participants.add(bufferInput.readInt());
+            changes.add(serializer.readObject(bufferInput));
         }
     }
 }
