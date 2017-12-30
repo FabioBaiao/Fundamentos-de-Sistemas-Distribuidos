@@ -22,8 +22,8 @@
       <file leaf-file-name="Coordinator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Coordinator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="149" column="36" lean-forward="false" selection-start-line="149" selection-start-column="36" selection-end-line="149" selection-end-column="36" />
+            <state relative-caret-position="72">
+              <caret line="55" column="53" lean-forward="true" selection-start-line="55" selection-start-column="53" selection-end-line="55" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -34,8 +34,8 @@
       <file leaf-file-name="Server.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="732">
-              <caret line="101" column="29" lean-forward="true" selection-start-line="101" selection-start-column="29" selection-end-line="101" selection-end-column="29" />
+            <state relative-caret-position="1242">
+              <caret line="69" column="16" lean-forward="false" selection-start-line="69" selection-start-column="16" selection-end-line="69" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -43,12 +43,47 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="AbortLog.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Log/AbortLog.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="72">
+              <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="TransactionInfo.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/TransactionInfo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="42" column="25" lean-forward="true" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
-              <folding />
+            <state relative-caret-position="660">
+              <caret line="64" column="40" lean-forward="false" selection-start-line="64" selection-start-column="40" selection-end-line="64" selection-end-column="40" />
+              <folding>
+                <element signature="e#632#633#0" expanded="true" />
+                <element signature="e#693#694#0" expanded="true" />
+                <element signature="e#1152#1153#0" expanded="true" />
+                <element signature="e#1192#1193#0" expanded="true" />
+                <element signature="e#1229#1230#0" expanded="true" />
+                <element signature="e#1291#1292#0" expanded="true" />
+                <element signature="e#1347#1348#0" expanded="true" />
+                <element signature="e#1397#1398#0" expanded="true" />
+                <element signature="e#1432#1433#0" expanded="true" />
+                <element signature="e#1479#1480#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TransactionChanges.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/TransactionChanges.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="16" column="27" lean-forward="false" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#346#347#0" expanded="true" />
+                <element signature="e#380#381#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -56,14 +91,10 @@
       <file leaf-file-name="CommitedComm.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Communication/CommitedComm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
+            <state relative-caret-position="360">
               <caret line="24" column="36" lean-forward="false" selection-start-line="24" selection-start-column="36" selection-end-line="24" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#370#371#0" expanded="true" />
-                <element signature="e#400#401#0" expanded="true" />
-                <element signature="e#498#499#0" expanded="true" />
-                <element signature="e#540#541#0" expanded="true" />
                 <element signature="e#635#636#0" expanded="true" />
                 <element signature="e#678#679#0" expanded="true" />
               </folding>
@@ -74,8 +105,8 @@
       <file leaf-file-name="Common.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Common.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="34" column="35" lean-forward="false" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
+            <state relative-caret-position="630">
+              <caret line="35" column="43" lean-forward="false" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -93,20 +124,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommittingLog.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Log/CommittingLog.java">
+      <file leaf-file-name="PreparedLog.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Log/PreparedLog.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#356#357#0" expanded="true" />
-                <element signature="e#386#387#0" expanded="true" />
-                <element signature="e#484#485#0" expanded="true" />
-                <element signature="e#526#527#0" expanded="true" />
-                <element signature="e#621#622#0" expanded="true" />
-                <element signature="e#664#665#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="144">
+              <caret line="14" column="12" lean-forward="false" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="12" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -117,28 +140,6 @@
             <state relative-caret-position="0">
               <caret line="0" column="12" lean-forward="false" selection-start-line="0" selection-start-column="12" selection-end-line="0" selection-end-column="12" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PreparedLog.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/Log/PreparedLog.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="36" column="60" lean-forward="true" selection-start-line="36" selection-start-column="60" selection-end-line="36" selection-end-column="60" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TransactionChanges.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/TransactionChanges.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="10" column="41" lean-forward="false" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -163,11 +164,12 @@
       <find>commitC</find>
       <find>CommitC</find>
       <find>okC</find>
-      <find>addre</find>
       <find>commited</find>
       <find>begin</find>
       <find>BeginC</find>
       <find>CommitComm</find>
+      <find>addre</find>
+      <find>commitc</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -207,16 +209,17 @@
         <option value="$PROJECT_DIR$/src/main/java/TestClient.java" />
         <option value="$PROJECT_DIR$/src/main/java/Log/ResourceLog.java" />
         <option value="$PROJECT_DIR$/src/main/java/Log/PreparingLog.java" />
-        <option value="$PROJECT_DIR$/src/main/java/TransactionChanges.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Log/PreparedLog.java" />
-        <option value="$PROJECT_DIR$/src/main/java/TransactionInfo.java" />
         <option value="$PROJECT_DIR$/src/main/java/CommittingLog.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Log/CommittingLog.java" />
         <option value="$PROJECT_DIR$/src/main/java/Log/CommitLog.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Common.java" />
         <option value="$PROJECT_DIR$/src/main/java/Communication/CommitedComm.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Coordinator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/TransactionChanges.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Log/AbortLog.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Common.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Log/CommittingLog.java" />
+        <option value="$PROJECT_DIR$/src/main/java/TransactionInfo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Log/PreparedLog.java" />
         <option value="$PROJECT_DIR$/src/main/java/Server.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Coordinator.java" />
       </list>
     </option>
   </component>
@@ -248,6 +251,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -273,29 +278,10 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="2pl" type="b2602c69:ProjectViewProjectNode" />
-              <item name="2pl" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="Communication" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="2pl" type="b2602c69:ProjectViewProjectNode" />
-              <item name="2pl" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="Log" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -307,6 +293,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -531,7 +518,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Abort.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Log/AbortLog.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="5" column="31" lean-forward="false" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
@@ -543,7 +530,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
           <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#632#633#0" expanded="true" />
+            <element signature="e#693#694#0" expanded="true" />
+            <element signature="e#1152#1153#0" expanded="true" />
+            <element signature="e#1192#1193#0" expanded="true" />
+            <element signature="e#1229#1230#0" expanded="true" />
+            <element signature="e#1291#1292#0" expanded="true" />
+            <element signature="e#1347#1348#0" expanded="true" />
+            <element signature="e#1397#1398#0" expanded="true" />
+            <element signature="e#1432#1433#0" expanded="true" />
+            <element signature="e#1479#1480#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -738,14 +736,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Abort.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="11" column="24" lean-forward="false" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
@@ -848,9 +838,9 @@
         <state relative-caret-position="288">
           <caret line="24" column="36" lean-forward="false" selection-start-line="24" selection-start-column="36" selection-end-line="24" selection-end-column="36" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#622#623#0" expanded="true" />
-            <element signature="e#665#666#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#622#623#0" expanded="false" />
+            <element signature="e#665#666#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -860,25 +850,94 @@
         <state relative-caret-position="684">
           <caret line="46" column="49" lean-forward="false" selection-start-line="46" selection-start-column="49" selection-end-line="46" selection-end-column="49" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/TransactionChanges.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Log/CommittingLog.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
-          <caret line="10" column="41" lean-forward="false" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
+          <caret line="9" column="11" lean-forward="false" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Log/PreparedLog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="36" column="60" lean-forward="true" selection-start-line="36" selection-start-column="60" selection-end-line="36" selection-end-column="60" />
+        <state relative-caret-position="144">
+          <caret line="14" column="12" lean-forward="false" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Log/CommitLog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Common.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="35" column="43" lean-forward="false" selection-start-line="35" selection-start-column="43" selection-end-line="35" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Communication/CommitedComm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="36" lean-forward="false" selection-start-line="24" selection-start-column="36" selection-end-line="24" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#635#636#0" expanded="true" />
+            <element signature="e#678#679#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/TransactionChanges.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="27" lean-forward="false" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#346#347#0" expanded="true" />
+            <element signature="e#380#381#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/TransactionInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="64" column="40" lean-forward="false" selection-start-line="64" selection-start-column="40" selection-end-line="64" selection-end-column="40" />
+          <folding>
+            <element signature="e#632#633#0" expanded="true" />
+            <element signature="e#693#694#0" expanded="true" />
+            <element signature="e#1152#1153#0" expanded="true" />
+            <element signature="e#1192#1193#0" expanded="true" />
+            <element signature="e#1229#1230#0" expanded="true" />
+            <element signature="e#1291#1292#0" expanded="true" />
+            <element signature="e#1347#1348#0" expanded="true" />
+            <element signature="e#1397#1398#0" expanded="true" />
+            <element signature="e#1432#1433#0" expanded="true" />
+            <element signature="e#1479#1480#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Log/AbortLog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -891,68 +950,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Communication/CommitedComm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="24" column="36" lean-forward="false" selection-start-line="24" selection-start-column="36" selection-end-line="24" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#370#371#0" expanded="true" />
-            <element signature="e#400#401#0" expanded="true" />
-            <element signature="e#498#499#0" expanded="true" />
-            <element signature="e#540#541#0" expanded="true" />
-            <element signature="e#635#636#0" expanded="true" />
-            <element signature="e#678#679#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Common.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="34" column="35" lean-forward="false" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Log/CommitLog.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Log/CommittingLog.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#356#357#0" expanded="true" />
-            <element signature="e#386#387#0" expanded="true" />
-            <element signature="e#484#485#0" expanded="true" />
-            <element signature="e#526#527#0" expanded="true" />
-            <element signature="e#621#622#0" expanded="true" />
-            <element signature="e#664#665#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/TransactionInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="42" column="25" lean-forward="true" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Coordinator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="149" column="36" lean-forward="false" selection-start-line="149" selection-start-column="36" selection-end-line="149" selection-end-column="36" />
+        <state relative-caret-position="72">
+          <caret line="55" column="53" lean-forward="true" selection-start-line="55" selection-start-column="53" selection-end-line="55" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -961,8 +962,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="732">
-          <caret line="101" column="29" lean-forward="true" selection-start-line="101" selection-start-column="29" selection-end-line="101" selection-end-column="29" />
+        <state relative-caret-position="1242">
+          <caret line="69" column="16" lean-forward="false" selection-start-line="69" selection-start-column="16" selection-end-line="69" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

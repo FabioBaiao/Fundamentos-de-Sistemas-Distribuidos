@@ -10,8 +10,9 @@ import java.util.List;
 
 public class PreparedLog implements CatalystSerializable{
 
-    int xid;
+    public int xid;
     List<Object> changes;
+    // locks
 
     public PreparedLog() {}
 

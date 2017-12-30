@@ -1,15 +1,17 @@
+package Log;
+
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class Abort implements CatalystSerializable{
+public class AbortLog implements CatalystSerializable{
 
-    int xid;
+    public int xid;
 
-    public Abort(){}
+    public AbortLog(){}
 
-    public Abort(int xid) {
+    public AbortLog(int xid) {
         this.xid = xid;
     }
 

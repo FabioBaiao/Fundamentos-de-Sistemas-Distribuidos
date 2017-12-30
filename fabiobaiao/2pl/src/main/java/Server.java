@@ -30,20 +30,49 @@ public class Server {
         Log l = new Log("" + id);
 
         Map<Integer, TransactionChanges> activeTransactions = new HashMap<>();
+        Set<Integer> indexesInUse = new TreeSet<>();
 
 
         Random r = new Random();
 
         Common.registerSerializers(tc);
 
-        tc.execute(() -> {
-            l.handler(Abort.class, (i, m) -> {
-            });
-            l.handler(CommitLog.class, (i, m) -> {
-            });
-            l.handler(PreparedLog.class, (i, m) -> {
-            });
+        l.handler(PreparedLog.class, (index, p) -> {
+            TransactionChanges transaction = new TransactionChanges(p.xid);
+            activeTransactions.put(p.xid, transaction);
+
+            indexesInUse.add(index);
+            transaction.addIndex(index);
         });
+
+
+        l.handler(CommitLog.class, (index, p) -> {
+            TransactionChanges transaction = activeTransactions.get(p.xid);
+            if (transaction == null) {
+                // quando apagou o log no final da transação, conseguiu apagar o prepared, mas não apagou o commit ??
+            }
+            else {
+                tc.execute(() -> {
+                    c.send(0, new CommitedComm(p.xid));
+                });
+                // persistir alterações ??
+                // libertar locks
+                // terminar transação
+            }
+        });
+
+        l.handler(AbortLog.class, (index, p) -> {
+            TransactionChanges transaction = activeTransactions.get(p.xid);
+            if (transaction == null) {
+                // quando apagou o log no final da transação, conseguiu apagar o prepared, mas não apagou o commit ??
+            }
+            else {
+                // recover initial status
+                // release locks of transaction
+                // terminar transação
+            }
+        });
+
 
         try {
             tc.execute(() -> l.open()).join().get();
@@ -55,23 +84,22 @@ public class Server {
             TransactionChanges transaction = activeTransactions.get(recv.xid);
             if (transaction == null) {
                 // Não conhecer uma transação em que participou significa que esta deve abortar
-                try {
-                    tc.execute(() ->
-                        l.append(new Abort(recv.xid))
-                    ).join().get();
-                    tc.execute(() -> {
-                        c.send(from, new NotOkComm(recv.xid));
-                    });
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
+                // Não é necessário guardar nada no log
+                tc.execute(() -> {
+                    c.send(from, new NotOkComm(recv.xid));
+                });
             }
             else {
                 try {
-                    tc.execute(() ->
-                        // add changes
+                    int index = tc.execute(() ->
+                        // adicionar objetos alterados
+                        // adicionar objetos com lock
                         l.append(new PreparedLog(recv.xid, new ArrayList<>()))
                     ).join().get();
+
+                    indexesInUse.add(index);
+                    transaction.addIndex(index);
+
                     tc.execute(() -> {
                         c.send(from, new OkComm(recv.xid));
                     });
@@ -84,9 +112,13 @@ public class Server {
         c.handler(CommitComm.class, (from, recv) -> {
             if (activeTransactions.containsKey(recv.xid)) {
                 try {
-                    tc.execute(() ->
+                    TransactionChanges transaction = activeTransactions.get(recv.xid);
+                    int index = tc.execute(() ->
                         l.append(new CommitLog(recv.xid))
                     ).join().get();
+
+                    /*indexesInUse.add(index);
+                    transaction.addIndex(index);*/
 
                     tc.execute(() -> {
                         c.send(from, new CommitedComm(recv.xid));
@@ -107,12 +139,19 @@ public class Server {
         });
 
         c.handler(RollbackComm.class, (from, recv) -> {
-            tc.execute(() -> {
-                l.append(new Abort(recv.xid));
-            });
-            // recover initial status
-            // release locks of transaction
-            System.out.println("Abort");
+            if (activeTransactions.containsKey(recv.xid)) {
+                try {
+                    tc.execute(() ->
+                            l.append(new AbortLog(recv.xid))
+                    ).join().get();
+
+                    // recover initial status
+                    // release locks of transaction
+                    // terminar transação
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         tc.execute(() -> {

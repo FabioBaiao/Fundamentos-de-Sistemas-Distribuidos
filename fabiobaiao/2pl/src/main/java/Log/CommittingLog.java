@@ -7,7 +7,7 @@ import io.atomix.catalyst.serializer.Serializer;
 
 public class CommittingLog implements CatalystSerializable{
 
-    int xid;
+    public int xid;
 
     public CommittingLog() {}
 

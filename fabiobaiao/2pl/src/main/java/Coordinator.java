@@ -48,32 +48,31 @@ public class Coordinator {
 
         try {
             tc.execute(() -> l.open()).join().get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        initClique();
-
-        // transações não terminadas do log
-        for (TransactionInfo transaction : activeTransactions.values()) {
-            if (transaction.isPreparing())
-                sendPrepares(transaction);
-            else
-                rollback(transaction);
-        }
-
-        rpcClientHandlers();
-    }
-
-    private void initClique() {
-        rpcCliqueHandlers();
-        twoPhaseCommitCliqueHandlers();
-
-        try {
             tc.execute(() -> c.open()).join().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
+        // iniciar handlers para não perder respostas
+        twoPhaseCommitCliqueHandlers();
+
+        // transações não terminadas do log
+        for (TransactionInfo transaction : activeTransactions.values()) {
+            switch (transaction.status) {
+                case RUNNING:
+                    rollback(transaction);
+                    break;
+                case PREPARING:
+                    sendPrepares(transaction);
+                    break;
+                case COMMITTING:
+                    sendCommits(transaction);
+                    break;
+            }
+        }
+
+        rpcCliqueHandlers();
+        rpcClientHandlers();
     }
 
     private int begin() {
@@ -87,8 +86,7 @@ public class Coordinator {
         try {
             int index = tc.execute(() -> l.append(new BeginLog(xid))).join().get();
 
-            transaction.addIndex(index);
-            indexesInUse.add(index);
+            addIndex(transaction, index);
 
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -99,20 +97,45 @@ public class Coordinator {
         return xid;
     }
 
+    private Object addResource(TransactionInfo transaction, int participant) {
+        if (transaction.containsParticipant(participant)){
+            rollback(transaction);
+            return Futures.completedFuture(new RollbackComm(transaction.id));
+        }
+        else {
+            addParticipant(transaction, participant);
+            // Qual é o resultado ???
+            return Futures.completedFuture(new Object());
+        }
+    }
+
     private void addParticipant(TransactionInfo transaction, int participant) {
         try {
             int index = tc.execute(() ->
                     l.append(new ResourceLog(transaction.id, participant))
             ).join().get();
 
-            transaction.addIndex(index);
-            indexesInUse.add(index);
+            addIndex(transaction, index);
 
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
         transaction.addParticipant(participant);
+    }
+
+    private void prepare(TransactionInfo transaction) {
+        try {
+            int index = tc.execute(() ->
+                    l.append(new PreparingLog(transaction.id))
+            ).join().get();
+
+            addIndex(transaction, index);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        sendPrepares(transaction);
     }
 
     private void sendPrepares(TransactionInfo transaction) {
@@ -123,52 +146,71 @@ public class Coordinator {
         }
     }
 
-    private void prepare(TransactionInfo transaction) {
-        try {
-            int index = tc.execute(() ->
-                    l.append(new PreparingLog(transaction.id))
-            ).join().get();
-
-            transaction.addIndex(index);
-            indexesInUse.add(index);
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+    private void prepared(TransactionInfo transaction, Integer from) {
+        transaction.addPrepared(from);
+        if (transaction.allPrepared()) {
+            commit(transaction);
         }
-
-        sendPrepares(transaction);
     }
 
     private void commit(TransactionInfo transaction) {
 
         try {
-            tc.execute(() ->
+            int index = tc.execute(() ->
                 l.append(new CommittingLog(transaction.id))
             ).join().get();
 
-            for (int i : transaction.prepared) {
-                tc.execute(() -> {
-                    c.send(i, new CommitComm(transaction.id));
-                });
-            }
+            addIndex(transaction, index);
+
+            sendCommits(transaction);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
     }
 
+    private void sendCommits(TransactionInfo transaction) {
+        for (int i : transaction.prepared) {
+            tc.execute(() -> {
+                c.send(i, new CommitComm(transaction.id));
+            });
+        }
+    }
+
+    private void committed(TransactionInfo transaction, Integer from) {
+        transaction.addCommitted(from);
+        if (transaction.allCommitted()) {
+            try {
+                tc.execute(() ->
+                        l.append(new CommitLog(transaction.id))
+                ).join().get();
+
+                removeTransaction(transaction);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void rollback(TransactionInfo transaction) {
-        // adicionar marcador no inicio ou no fim ??
-        // tem de ser adicionado, pois não é garantido que o preparing seja removido
-        tc.execute(() -> {
-            l.append(new Abort(transaction.id));
-        });
-        for (int i : transaction.participants) {
-            tc.execute(() -> {
-                c.send(i, new RollbackComm(transaction.id));
-            });
+        try {
+            tc.execute(() ->
+                l.append(new AbortLog(transaction.id))
+            ).join().get();
+
+            for (int i : transaction.participants) {
+                sendRollback(i, transaction.id);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
 
         removeTransaction(transaction);
+    }
+
+    private void sendRollback(Integer from, int xid) {
+        tc.execute(() -> {
+            c.send(from, new RollbackComm(xid));
+        });
     }
 
     private void removeTransaction(TransactionInfo transaction) {
@@ -189,27 +231,58 @@ public class Coordinator {
         }
     }
 
+    private void addIndex(TransactionInfo transaction, Integer index) {
+        transaction.addIndex(index);
+        indexesInUse.add(index);
+    }
+
     private void twoPhaseCommitLogHandlers() {
 
         l.handler(PreparingLog.class, (index, p) -> {
             System.out.println("Log.PreparingLog found");
             TransactionInfo transaction = activeTransactions.get(p.xid);
-            transaction.setPreparing();
+            if (transaction == null) {
+                // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o preparing ??
+            }
+            else {
+                transaction.setPreparing();
 
-            transaction.addIndex(index);
-            indexesInUse.add(index);
+                addIndex(transaction, index);
+            }
+        });
+
+        l.handler(CommittingLog.class, (index, p) -> {
+            TransactionInfo transaction = activeTransactions.get(p.xid);
+            if (transaction == null){
+                // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o committing ??
+            }
+            else {
+                transaction.setCommitting();
+
+                addIndex(transaction, index);
+            }
         });
 
         l.handler(CommitLog.class, (index, p) -> {
             System.out.println("Log.CommitLog found");
             TransactionInfo transaction = activeTransactions.get(p.xid);
-            removeTransaction(transaction);
+            if (transaction == null) {
+                // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o commit ??
+            }
+            else {
+                removeTransaction(transaction);
+            }
         });
 
-        l.handler(Abort.class, (index, p) -> {
-            System.out.println("Abort found");
+        l.handler(AbortLog.class, (index, p) -> {
+            System.out.println("Log.AbortLog found");
             TransactionInfo transaction = activeTransactions.get(p.xid);
-            removeTransaction(transaction);
+            if (transaction == null) {
+                // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o abort ??
+            }
+            else {
+                removeTransaction(transaction);
+            }
         });
     }
 
@@ -217,24 +290,17 @@ public class Coordinator {
         c.handler(OkComm.class, (from, recv) -> {
             TransactionInfo transaction = activeTransactions.get(recv.xid);
             if (transaction == null) {
-                // Transação pode ser apagada se decisão for rollback??
-                tc.execute(() -> {
-                    c.send(from, new RollbackComm(recv.xid));
-                });
+                sendRollback(from, recv.xid);
             }
             else {
-                transaction.addPrepared(from);
-                if (transaction.allPrepared())
-                    commit(transaction);
+                prepared(transaction, from);
             }
         });
 
         c.handler(NotOkComm.class, (from, recv) ->  {
             TransactionInfo transaction = activeTransactions.get(recv.xid);
             if (transaction == null) {
-                tc.execute(() -> {
-                    c.send(from, new RollbackComm(recv.xid));
-                });
+                sendRollback(from, recv.xid);
             }
             else {
                 rollback(transaction);
@@ -246,9 +312,10 @@ public class Coordinator {
             if (transaction == null) {
                 // Coordenador falhar depois de enviar commits, portanto vai reenvia-los
                 // Nunca acontece
+                // DEPENDE DA IMPLEMENTAÇÃO NO PARTICIPANTE
             }
             else {
-                removeTransaction(transaction);
+                committed(transaction, from);
             }
         });
     }
@@ -256,21 +323,22 @@ public class Coordinator {
     private void rpcLogHandlers() {
 
         l.handler(BeginLog.class, (index, p) -> {
-            System.out.println("BeginLog found");
             TransactionInfo transaction = new TransactionInfo(p.xid);
             activeTransactions.put(p.xid, transaction);
 
-            transaction.addIndex(index);
-            indexesInUse.add(index);
+            addIndex(transaction, index);
         });
 
         l.handler(ResourceLog.class, (index, p) -> {
-            System.out.println("Log.ResourceLog found");
             TransactionInfo transaction = activeTransactions.get(p.xid);
-            transaction.addParticipant(p.participant);
+            if (transaction == null){
+                // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o resourcelog ??
+            }
+            else {
+                transaction.addParticipant(p.participant);
 
-            transaction.addIndex(index);
-            indexesInUse.add(index);
+                addIndex(transaction, index);
+            }
         });
     }
 
@@ -281,16 +349,9 @@ public class Coordinator {
 
             TransactionInfo transaction = activeTransactions.get(recv.xid);
             if (transaction == null) {
-                /*
-                * para receber um AddResource é necessário que o begin() do cliente tenha completado com sucesso
-                * se o coordenador falhar vai descartar todas as transações iniciadas que não estejam em 2PC
-                * portanto tem de se avisar o participante para fazer rollback
-                * */
                 return Futures.completedFuture(new RollbackComm(recv.xid));
             } else {
-                addParticipant(transaction, from);
-                // Confirmação
-                return Futures.completedFuture(new Object());
+                return Futures.completedFuture(addResource(transaction, from));
             }
         });
     }
@@ -303,20 +364,13 @@ public class Coordinator {
             });
 
             connection.handler(CommitComm.class, (recv) -> {
-                Object r;
-
                 TransactionInfo transaction = activeTransactions.get(recv.xid);
                 if (transaction == null) {
-                    /*
-                    * para receber um CommitComm é necessário que o begin() do cliente tenha completado com sucesso
-                    * todos os participantes registados desta transação já foram avisados para fazer rollback (a partir do Log)
-                    * avisar cliente que não é possivel fazer commit
-                    * */
                     return Futures.completedFuture(new RollbackComm(recv.xid));
                 }
                 else {
                     prepare(transaction);
-                    // return só devia ser final
+                    // return só depois de saber resultado final !!
                     return Futures.completedFuture(null);
                 }
             });
