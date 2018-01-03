@@ -13,21 +13,21 @@ public class LocalAccount implements Account {
 	}
 
 	@Override
-	public void pay(double ammount) {
-		pay(ammount, null);
+	public void pay(double amount) {
+		pay(amount, null);
 	}
 
 	@Override
-	public void pay(double ammount, String description) {
+	public void pay(double amount, String description) {
 /*
-		if (balance >= ammount) {
-			balance -= ammount;
-			paymentHistory.add(new Payment(ammount, description));
+		if (balance >= amount) {
+			balance -= amount;
+			paymentHistory.add(new Payment(amount, description));
 		} else {
-			throw new NotEnoughFundsException(ammount);
+			throw new NotEnoughFundsException(amount);
 		}
 */
-		paymentHistory.add(new Payment(ammount, description)); 
+		paymentHistory.add(new Payment(amount, description)); 
 	}
 
 	@Override

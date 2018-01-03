@@ -20,7 +20,7 @@ public class BankPayFromReq implements CatalystSerializable {
 
 	public int getId() { return id; }
 	public int getAccountNo() { return accountNo; }
-	public double getAmmount() { return amount; }
+	public double getAmount() { return amount; }
 
 	@Override
 	public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {

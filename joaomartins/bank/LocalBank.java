@@ -7,13 +7,13 @@ public class LocalBank implements Bank {
 	private Map<Integer, Account> accounts;
 
 	@Override
-	public void payFrom(int accountNo, double ammount) throws NoSuchAccountException {
+	public void payFrom(int accountNo, double amount) throws NoSuchAccountException {
 		Account a = accounts.get(accountNo);
 
 		if (a == null)
 			throw new NoSuchAccountException(accountNo);
 
-		a.pay(ammount);
+		a.pay(amount);
 	}
 
 	@Override
