@@ -3,17 +3,14 @@ import java.util.List;
 
 public class TransactionChanges {
 
-    int xid;
+    int id;
     List<Object> changed;
-    List<Integer> indexes;
+    public int client;
 
-    public TransactionChanges(int xid) {
-        this.xid = xid;
+    public TransactionChanges(int id, int client) {
+        this.id = id;
+        this.client = client;
         this.changed = new ArrayList<>();
-        this.indexes = new ArrayList<>();
     }
 
-    public void addIndex(int index) {
-        indexes.add(index);
-    }
 }

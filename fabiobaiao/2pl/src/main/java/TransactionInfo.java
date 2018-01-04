@@ -10,19 +10,21 @@ public class TransactionInfo {
     Set<Integer> committed;
     public List<Integer> indexes;
     public int id;
+    public int client;
 
     Status status;
 
     public TransactionInfo() {
     }
 
-    public TransactionInfo(int id) {
+    public TransactionInfo(int id, int client) {
         this.id = id;
         status = Status.RUNNING;
         this.participants = new HashSet<>();
         this.prepared = new HashSet<>();
         this.committed = new HashSet<>();
         this.indexes = new ArrayList<>();
+        this.client = client;
     }
 
     public boolean allPrepared() {

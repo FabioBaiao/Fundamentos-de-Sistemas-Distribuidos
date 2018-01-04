@@ -4,20 +4,19 @@ import io.atomix.catalyst.concurrent.Futures;
 import io.atomix.catalyst.concurrent.SingleThreadContext;
 import io.atomix.catalyst.concurrent.ThreadContext;
 import io.atomix.catalyst.serializer.Serializer;
-import io.atomix.catalyst.transport.Address;
 import io.atomix.catalyst.transport.Transport;
 import io.atomix.catalyst.transport.netty.NettyTransport;
 import pt.haslab.ekit.Clique;
 import pt.haslab.ekit.Log;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Coordinator {
 
     private ThreadContext tc;
-    private Transport t;
     private Log l;
     private Clique c;
 
@@ -25,24 +24,21 @@ public class Coordinator {
     private AtomicInteger transactionIdCounter;
     private TreeSet<Integer> indexesInUse;
 
-    private Address address;
-
-    private Coordinator(Address[] addresses, int id) {
+    public Coordinator(int id) {
         this.tc = new SingleThreadContext("srv-%d", new Serializer());
         this.l = new Log("" + id);
-        this.t = new NettyTransport();
-        this.c = new Clique(t, id, addresses);
+        Transport t = new NettyTransport();
+        this.c = new Clique(t, id, Common.addresses);
 
         this.activeTransactions = new HashMap<>();
         this.transactionIdCounter = new AtomicInteger(0);
         this.indexesInUse = new TreeSet<>();
-
-        this.address = addresses[id];
     }
 
-    private void init() {
+    public void init() {
         Common.registerSerializers(tc);
 
+        // criar handlers do log para serem executados durante o open()
         rpcLogHandlers();
         twoPhaseCommitLogHandlers();
 
@@ -53,8 +49,8 @@ public class Coordinator {
             e.printStackTrace();
         }
 
-        // iniciar handlers para não perder respostas
-        twoPhaseCommitCliqueHandlers();
+        // iniciar handlers dos servidores para não perder respostas relativas ao 2PC
+        twoPhaseCommitServerHandlers();
 
         // transações não terminadas do log
         for (TransactionInfo transaction : activeTransactions.values()) {
@@ -71,20 +67,21 @@ public class Coordinator {
             }
         }
 
-        rpcCliqueHandlers();
+        // inicializar handlers de rpc para permitir novas transações
+        rpcServerHandlers();
         rpcClientHandlers();
     }
 
-    private int begin() {
+    private int begin(int client) {
         // para não sobrepor
         while (activeTransactions.containsKey(transactionIdCounter.incrementAndGet()));
 
         int xid = transactionIdCounter.get();
 
-        TransactionInfo transaction = new TransactionInfo(xid);
+        TransactionInfo transaction = new TransactionInfo(xid, client);
 
         try {
-            int index = tc.execute(() -> l.append(new BeginLog(xid))).join().get();
+            int index = tc.execute(() -> l.append(new BeginLog(xid, client))).join().get();
 
             addIndex(transaction, index);
 
@@ -104,8 +101,7 @@ public class Coordinator {
         }
         else {
             addParticipant(transaction, participant);
-            // Qual é o resultado ???
-            return Futures.completedFuture(new Object());
+            return Futures.completedFuture(new Ack());
         }
     }
 
@@ -286,7 +282,7 @@ public class Coordinator {
         });
     }
 
-    private void twoPhaseCommitCliqueHandlers() {
+    private void twoPhaseCommitServerHandlers() {
         c.handler(OkComm.class, (from, recv) -> {
             TransactionInfo transaction = activeTransactions.get(recv.xid);
             if (transaction == null) {
@@ -323,7 +319,7 @@ public class Coordinator {
     private void rpcLogHandlers() {
 
         l.handler(BeginLog.class, (index, p) -> {
-            TransactionInfo transaction = new TransactionInfo(p.xid);
+            TransactionInfo transaction = new TransactionInfo(p.xid, p.client);
             activeTransactions.put(p.xid, transaction);
 
             addIndex(transaction, index);
@@ -342,7 +338,7 @@ public class Coordinator {
         });
     }
 
-    private void rpcCliqueHandlers() {
+    private void rpcServerHandlers() {
         c.handler(AddResourceComm.class, (from, recv) -> {
 
             Object r;
@@ -357,36 +353,29 @@ public class Coordinator {
     }
 
     private void rpcClientHandlers() {
-        t.server().listen(address, connection -> {
+        c.handler(Begin.class, (from, recv) -> {
+            int xid = begin(from);
+            return Futures.completedFuture(new TransactionContext(xid));
+        });
 
-            connection.handler(BeginComm.class, (recv) -> {
-                return Futures.completedFuture(begin());
-            });
-
-            connection.handler(CommitComm.class, (recv) -> {
-                TransactionInfo transaction = activeTransactions.get(recv.xid);
-                if (transaction == null) {
-                    return Futures.completedFuture(new RollbackComm(recv.xid));
-                }
-                else {
-                    prepare(transaction);
-                    // return só depois de saber resultado final !!
-                    return Futures.completedFuture(null);
-                }
-            });
+        c.handler(Commit.class, (from, recv) -> {
+            TransactionInfo transaction = activeTransactions.get(recv.xContext.xid);
+            if (transaction == null) {
+                return Futures.completedFuture(new Rollback(recv.xContext.xid));
+            }
+            else {
+                prepare(transaction);
+                // return só depois de saber resultado final !!
+                return Futures.completedFuture(null);
+            }
         });
     }
 
     public static void main(String[] args) {
-        Address[] addresses = new Address[]{
-                new Address("127.0.0.1:10000"),
-                new Address("127.0.0.1:10001"),
-                new Address("127.0.0.1:10002")
-        };
 
         int id = 0;
 
-        Coordinator c = new Coordinator(addresses, id);
+        Coordinator c = new Coordinator(id);
 
         c.init();
     }

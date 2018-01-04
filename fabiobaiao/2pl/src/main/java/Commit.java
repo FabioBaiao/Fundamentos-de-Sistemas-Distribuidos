@@ -1,31 +1,26 @@
-package Log;
-
+import Communication.TransactionContext;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
+public class Commit implements CatalystSerializable{
 
-public class BeginLog implements CatalystSerializable{
-    public int xid;
-    public int client;
+    public TransactionContext xContext;
 
-    BeginLog() {}
+    Commit() {}
 
-    public BeginLog(int xid, int client) {
-        this.xid = xid;
-        this.client = client;
+    public Commit(TransactionContext xContext) {
+        this.xContext = xContext;
     }
 
     @Override
     public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {
-        bufferOutput.writeInt(xid);
-        bufferOutput.writeInt(client);
+        serializer.writeObject(xContext, bufferOutput);
     }
 
     @Override
     public void readObject(BufferInput<?> bufferInput, Serializer serializer) {
-        xid = bufferInput.readInt();
-        client = bufferInput.readInt();
+        xContext = serializer.readObject(bufferInput);
     }
 }

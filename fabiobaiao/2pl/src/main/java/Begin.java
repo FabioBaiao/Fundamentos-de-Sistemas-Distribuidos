@@ -1,13 +1,11 @@
-package Communication;
-
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class BeginComm implements CatalystSerializable{
+public class Begin implements CatalystSerializable{
 
-    public BeginComm() {}
+    public Begin() {}
 
     @Override
     public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {

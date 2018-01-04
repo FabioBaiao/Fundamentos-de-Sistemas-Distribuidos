@@ -1,8 +1,20 @@
 import Communication.*;
+import Communication.Begin;
 import Log.*;
 import io.atomix.catalyst.concurrent.ThreadContext;
+import io.atomix.catalyst.transport.Address;
 
 public class Common {
+
+    public static Address[] addresses = new Address[]{
+            // Coordenador
+            new Address("127.0.0.1:10000"),
+            // Servers
+            new Address("127.0.0.1:20000"),
+            new Address("127.0.0.1:20001"),
+            // Clients
+            new Address("127.0.0.1:30000")
+    };
 
     public static void registerSerializers(ThreadContext tc){
 
@@ -10,14 +22,23 @@ public class Common {
 
         registerComm(tc);
 
+        registerClient(tc);
+
         tc.serializer()
                 .register(MethodCall.class);
+    }
+
+    private static void registerClient(ThreadContext tc) {
+        tc.serializer()
+                .register(Ack.class)
+                .register(Begin.class)
+                .register(Commit.class)
+                .register(Rollback.class);
     }
 
     private static void registerComm(ThreadContext tc) {
         tc.serializer()
                 .register(AddResourceComm.class)
-                .register(BeginComm.class)
                 .register(CommitComm.class)
                 .register(CommitedComm.class)
                 .register(NotOkComm.class)
