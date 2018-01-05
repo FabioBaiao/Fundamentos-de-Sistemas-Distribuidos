@@ -153,6 +153,8 @@ public class Coordinator {
 
             addIndex(transaction, index);
 
+            transaction.status = TransactionInfo.Status.COMMITTING;
+
             sendCommits(transaction);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -171,7 +173,8 @@ public class Coordinator {
             try {
                 l.append(new CommitLog(transaction.id)).get();
 
-                removeTransaction(transaction);
+                //removeTransaction(transaction);
+                transaction.status = TransactionInfo.Status.COMMITTED;
                 transaction.answer.complete(new Ack());
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -224,7 +227,7 @@ public class Coordinator {
             System.out.println("Log.PreparingLog found");
             TransactionInfo transaction = activeTransactions.get(p.xid);
             if (transaction == null) {
-                // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o preparing ??
+                // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o preparing ??
             }
             else {
                 transaction.setPreparing();
@@ -236,7 +239,7 @@ public class Coordinator {
         l.handler(CommittingLog.class, (index, p) -> {
             TransactionInfo transaction = activeTransactions.get(p.xid);
             if (transaction == null){
-                // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o committing ??
+                // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o committing ??
             }
             else {
                 transaction.setCommitting();
@@ -252,7 +255,8 @@ public class Coordinator {
                 // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o commit ??
             }
             else {
-                removeTransaction(transaction);
+                //removeTransaction(transaction);
+                transaction.status = TransactionInfo.Status.COMMITTED;
             }
         });
 
@@ -317,7 +321,7 @@ public class Coordinator {
         l.handler(ResourceLog.class, (index, p) -> {
             TransactionInfo transaction = activeTransactions.get(p.xid);
             if (transaction == null){
-                // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o resourcelog ??
+                // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o resourcelog ??
             }
             else {
                 transaction.addParticipant(p.participant);
@@ -363,7 +367,8 @@ public class Coordinator {
                 else if (transaction.participants.size() == 0) {
                     try {
                         l.append(new CommitLog(transaction.id)).get();
-                        removeTransaction(transaction);
+                        //removeTransaction(transaction);
+                        transaction.status = TransactionInfo.Status.COMMITTED;
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
                     }
@@ -372,6 +377,13 @@ public class Coordinator {
                 else if (transaction.status == TransactionInfo.Status.PREPARING) {
                     sendPrepares(transaction);
                     return transaction.answer;
+                }
+                else if (transaction.status == TransactionInfo.Status.COMMITTING) {
+                    sendCommits(transaction);
+                    return transaction.answer;
+                }
+                else if (transaction.status == TransactionInfo.Status.COMMITTED) {
+                    return Futures.completedFuture(new Ack());
                 }
                 else {
                     transaction.answer = new CompletableFuture<>();

@@ -72,6 +72,6 @@ public class TransactionInfo {
 
 
     public enum Status {
-        RUNNING, PREPARING, COMMITTING
+        RUNNING, PREPARING, COMMITTING, COMMITTED
     }
 }

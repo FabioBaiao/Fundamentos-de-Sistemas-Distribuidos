@@ -37,8 +37,7 @@ public class ServerRPC {
                     return false;
                 }
 
-                TransactionChanges transaction2 = new TransactionChanges(xContext.xid, client);
-                activeTransactions.put(xContext.xid, transaction2);
+                activeTransactions.put(xContext.xid, new TransactionChanges(xContext.xid, client));
 
                 return true;
             });
@@ -103,9 +102,6 @@ public class ServerRPC {
                         l.append(new PreparedLog(transaction.id, transaction.client, new ArrayList<>())).get();
                         transaction.status = TransactionChanges.Status.PREPARED;
 
-                        System.out.println("Appended");
-                        Thread.sleep(5000);
-
                         c.send(from, new OkComm(recv.xid));
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
@@ -121,7 +117,8 @@ public class ServerRPC {
 
                         c.send(from, new CommitedComm(recv.xid));
                         // libertar locks
-                        // terminar transação
+
+                        activeTransactions.remove(transaction.id);
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
                     }
@@ -139,7 +136,7 @@ public class ServerRPC {
 
                         // recover initial status
                         // release locks of transaction
-                        // terminar transação
+                        activeTransactions.remove(recv.xid);
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
                     }
@@ -153,6 +150,8 @@ public class ServerRPC {
             TransactionChanges transaction = new TransactionChanges(p.xid, p.client);
             activeTransactions.put(p.xid, transaction);
             transaction.status = TransactionChanges.Status.PREPARED;
+            // guardar estado inicial das variaveis alteradas
+            // repor variaveis alteradas
         });
 
 
@@ -164,9 +163,8 @@ public class ServerRPC {
                 tc.execute(() -> {
                     c.send(0, new CommitedComm(p.xid));
                 });
-                // persistir alterações ??
                 // libertar locks
-                // terminar transação
+                activeTransactions.remove(transaction.id);
             }
         });
 
@@ -177,7 +175,7 @@ public class ServerRPC {
             } else {
                 // recover initial status
                 // release locks of transaction
-                // terminar transação
+                activeTransactions.remove(transaction.id);
             }
         });
     }
