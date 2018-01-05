@@ -13,20 +13,20 @@ import java.util.concurrent.ExecutionException;
 public class RemoteCart implements Cart {
 
     private final DistributedObjectsRuntime dor;
-    private final Address a;
-    private final int id;
+    private final int cliqueId;
+    private final int objectId;
 
-    public RemoteCart(DistributedObjectsRuntime dor, Address a, int id) {
+    public RemoteCart(DistributedObjectsRuntime dor, int cliqueId, int objectId) {
         this.dor = dor;
-        this.a = a;
-        this.id = id;
+        this.cliqueId = cliqueId;
+        this.objectId = objectId;
     }
 
     @Override
     public boolean add(TransactionContext txCtxt, Book b) {
         try {
             CartAddRep r = (CartAddRep) dor.tc.execute(() ->
-                dor.cons.get(a).sendAndReceive(new CartAddReq(txCtxt, id, b))
+                dor.c.sendAndReceive(cliqueId, new CartAddReq(txCtxt, objectId, b))
             ).join().get();
             
             return r.getAdded();
@@ -40,7 +40,7 @@ public class RemoteCart implements Cart {
     public boolean remove(TransactionContext txCtxt, Book b) {
         try {
             CartRemoveRep r = (CartRemoveRep) dor.tc.execute(() ->
-                dor.cons.get(a).sendAndReceive(new CartRemoveReq(txCtxt, id, b))
+                dor.c.sendAndReceive(cliqueId, new CartRemoveReq(txCtxt, objectId, b))
             ).join().get();
             
             return r.removed;
@@ -54,7 +54,7 @@ public class RemoteCart implements Cart {
     public void clear(TransactionContext txCtxt) {
         try {
             CartClearRep r = (CartClearRep) dor.tc.execute(() ->
-                dor.cons.get(a).sendAndReceive(new CartClearReq(txCtxt, id))
+                dor.c.sendAndReceive(cliqueId, new CartClearReq(txCtxt, objectId))
             ).join().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -65,7 +65,7 @@ public class RemoteCart implements Cart {
     public Set<Book> getContent(TransactionContext txCtxt) {
         try {
             CartGetContentRep r = (CartGetContentRep) dor.tc.execute(() ->
-                dor.cons.get(a).sendAndReceive(new CartGetContentReq(txCtxt, id))
+                dor.c.sendAndReceive(cliqueId, new CartGetContentReq(txCtxt, objectId))
             ).join().get();
 
             return r.content;
@@ -82,7 +82,7 @@ public class RemoteCart implements Cart {
             ObjRef srcRef = remoteSrc.getObjRef();
 
             CartBuyRep r = (CartBuyRep) dor.tc.execute(() ->
-                dor.cons.get(a).sendAndReceive(new CartBuyReq(txCtxt, id, srcRef, paymentDescription))
+                dor.c.sendAndReceive(cliqueId, new CartBuyReq(txCtxt, objectId, srcRef, paymentDescription))
             ).join().get();
             
             return r.getOrder();

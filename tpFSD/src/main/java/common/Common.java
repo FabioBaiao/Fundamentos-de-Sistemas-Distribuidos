@@ -1,5 +1,9 @@
 package common;
 
+import bank.BankGetAccountRep;
+import bank.BankGetAccountReq;
+import bookstore.StoreSearchRep;
+import bookstore.StoreSearchReq;
 import io.atomix.catalyst.concurrent.ThreadContext;
 import io.atomix.catalyst.transport.Address;
 import twophasecommit.Begin;
@@ -21,6 +25,12 @@ public class Common {
             new Address("127.0.0.1:30000")
     };
 
+    public static int STORE_SERVER_ID = 1;
+    public static int STORE_ID = 1;
+    public static int BANK_SERVER_ID = 2;
+    public static int BANK_ID = 1;
+    public static int STORE_ACCOUNT_ID = 0;
+
     public static void registerSerializers(ThreadContext tc){
 
         registerLogs(tc);
@@ -29,9 +39,24 @@ public class Common {
 
         registerClient(tc);
 
-        /*tc.serializer()
-                .register(MethodCall.class)
-                .register(Reply.class);*/
+        registerReqs(tc);
+
+        registerReps(tc);
+
+        tc.serializer().register(ObjRef.class);
+    }
+
+    private static void registerReps(ThreadContext tc) {
+        tc.serializer()
+            .register(StoreSearchRep.class)
+            .register(BankGetAccountRep.class);
+    }
+
+    private static void registerReqs(ThreadContext tc) {
+        tc.serializer()
+                .register(StoreSearchReq.class)
+                .register(BankGetAccountReq.class);
+
     }
 
     private static void registerClient(ThreadContext tc) {

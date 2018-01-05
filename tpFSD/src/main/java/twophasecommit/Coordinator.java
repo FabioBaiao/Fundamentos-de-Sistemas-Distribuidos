@@ -361,7 +361,7 @@ public class Coordinator {
         tc.execute(() -> {
             c.handler(Begin.class, (from, recv) -> {
                 int xid = begin(from);
-                System.out.println("Begun");
+                System.out.println("Begin " + xid);
                 return Futures.completedFuture(new TransactionContext(xid));
             });
 

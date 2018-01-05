@@ -10,21 +10,25 @@ import java.util.SortedSet;
 public class RemoteStore implements Store {
 
     private final DistributedObjectsRuntime dor;
-    private final Address a;
-    private final int id;
+    private final int cliqueId;
+    private final int objectId;
 
-    public RemoteStore(DistributedObjectsRuntime dor, Address a,  int id) {
+    public RemoteStore(DistributedObjectsRuntime dor, int cliqueId,  int objectId) {
         this.dor = dor;
-        this.a = a;
-        this.id = id;
+        this.cliqueId = cliqueId;
+        this.objectId = objectId;
     }
 
     @Override
     public Book search(TransactionContext txCtxt, String title) {
         try {
             StoreSearchRep r = (StoreSearchRep) dor.tc.execute(() ->
-                    dor.cons.get(a).sendAndReceive(new StoreSearchReq(txCtxt, id, title))
+                    dor.c.sendAndReceive(cliqueId, new StoreSearchReq(txCtxt, objectId, title))
             ).join().get();
+
+            /*StoreSearchRep r = (StoreSearchRep) dor.tc.execute(() ->
+                    dor.cons.get(a).sendAndReceive(new StoreSearchReq(txCtxt, id, title))
+            ).join().get();*/
             
             return r.getBook();
         } catch (InterruptedException | ExecutionException e) {
@@ -37,7 +41,7 @@ public class RemoteStore implements Store {
     public Cart newCart(TransactionContext txCtxt, int clientId) {
         try {
             StoreMakeCartRep r = (StoreMakeCartRep) dor.tc.execute(() ->
-                    dor.cons.get(a).sendAndReceive(new StoreMakeCartReq(txCtxt, id, clientId))
+                    dor.c.sendAndReceive(cliqueId, new StoreMakeCartReq(txCtxt, objectId, clientId))
             ).join().get();
             
             return (Cart) dor.objImport(r.getCartRef());
@@ -51,7 +55,7 @@ public class RemoteStore implements Store {
     public SortedSet<Order> getOrderHistory(TransactionContext txCtxt, int clientId) {
         try {
             StoreGetOrderHistoryRep r = (StoreGetOrderHistoryRep) dor.tc.execute(() -> 
-                    dor.cons.get(a).sendAndReceive(new StoreGetOrderHistoryReq(txCtxt, id, clientId))
+                    dor.c.sendAndReceive(cliqueId, new StoreGetOrderHistoryReq(txCtxt, objectId, clientId))
             ).join().get();
 
             return r.getOrderHistory();

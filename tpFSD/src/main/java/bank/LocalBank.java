@@ -11,9 +11,9 @@ public class LocalBank implements Bank {
 	private final String name;
 	private final Map<Integer, Account> accounts;
 
-	public LocalBank(String name) {
+	public LocalBank(String name, Map<Integer, Account> accounts) {
 		this.name = name;
-		this.accounts = new HashMap<>();
+		this.accounts = new HashMap<>(accounts);
 	}
 
 	@Override

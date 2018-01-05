@@ -3,10 +3,11 @@ package bank;
 import twophasecommit.TransactionContext;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public interface Bank {
 	String getName(TransactionContext txCtxt);
-	Account getAccount(TransactionContext txCtxt, int accountNo);
+	Account getAccount(TransactionContext txCtxt, int accountNo) throws Exception;
 
 	interface Account {
 		int getNo(TransactionContext txCtxt);

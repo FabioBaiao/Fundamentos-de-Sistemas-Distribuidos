@@ -6,7 +6,7 @@ import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
 public class AddResourceComm implements CatalystSerializable{
-    private Integer xid;
+    private int xid;
     private int client;
 
     public AddResourceComm() {}

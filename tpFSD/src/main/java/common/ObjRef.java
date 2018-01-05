@@ -4,36 +4,35 @@ import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
-import io.atomix.catalyst.transport.Address;
 
 public class ObjRef implements CatalystSerializable {
-    Address address;
-    int id;
+    int cliqueId;
+    int objectId;
     String cls;
 
     public ObjRef() {}
 
-    public ObjRef(Address address, int id, String cls) {
-        this.address = address;
-        this.id = id;
+    public ObjRef(int cliqueId, int id, String cls) {
+        this.cliqueId = cliqueId;
+        this.objectId = id;
         this.cls = cls;
     }
 
-    public Address getAddress() { return address; }
-    public int getId() { return id; }
+    public int getCliqueId() { return cliqueId; }
+    public int getObjectId() { return objectId; }
     public String getCls() { return cls; }
 
     @Override
     public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {
-        bufferOutput.writeInt(id);
-        serializer.writeObject(address, bufferOutput);
+        bufferOutput.writeInt(objectId);
+        serializer.writeObject(cliqueId, bufferOutput);
         bufferOutput.writeString(cls);
     }
 
     @Override
     public void readObject(BufferInput<?> bufferInput, Serializer serializer) {
-        id = bufferInput.readInt();
-        address = serializer.readObject(bufferInput);
+        objectId = bufferInput.readInt();
+        cliqueId = serializer.readObject(bufferInput);
         cls = bufferInput.readString();
     }
 }
