@@ -15,7 +15,7 @@ public class CartGetContentRep extends Rep {
 	public CartGetContentRep() {}
 
 	public CartGetContentRep(Set<Book> content) {
-		this.content = content;
+		this.content = (content == null) ? Collections.emptySet() : content;
 	}
 
 	public CartGetContentRep(String error) {

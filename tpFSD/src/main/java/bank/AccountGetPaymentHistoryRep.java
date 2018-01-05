@@ -15,7 +15,7 @@ public class AccountGetPaymentHistoryRep extends Rep {
 	public AccountGetPaymentHistoryRep() {}
 
 	public AccountGetPaymentHistoryRep(List<Payment> paymentHistory) {
-		this.paymentHistory = paymentHistory;
+		this.paymentHistory = (paymentHistory == null) ? Collections.emptyList() : paymentHistory;
 	}
 
 	public AccountGetPaymentHistoryRep(String error) {

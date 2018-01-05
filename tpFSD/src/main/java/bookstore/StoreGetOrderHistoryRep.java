@@ -16,7 +16,7 @@ public class StoreGetOrderHistoryRep extends Rep {
     public StoreGetOrderHistoryRep() {}
     
     public StoreGetOrderHistoryRep(SortedSet<Order> orderHistory) {
-        this.orderHistory = orderHistory;
+        this.orderHistory = (orderHistory == null) ? Collections.emptySortedSet() : orderHistory;
     }
 
     public StoreGetOrderHistoryRep(String error) {
