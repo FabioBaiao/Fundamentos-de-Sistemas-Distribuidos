@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public class TransactionInfo {
 
@@ -13,6 +14,8 @@ public class TransactionInfo {
     public int client;
 
     Status status;
+
+    CompletableFuture<Object> answer;
 
     public TransactionInfo() {
     }

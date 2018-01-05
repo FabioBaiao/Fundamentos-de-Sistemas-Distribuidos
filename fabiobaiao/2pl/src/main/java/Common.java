@@ -1,5 +1,4 @@
 import Communication.*;
-import Communication.Begin;
 import Log.*;
 import io.atomix.catalyst.concurrent.ThreadContext;
 import io.atomix.catalyst.transport.Address;
@@ -25,7 +24,8 @@ public class Common {
         registerClient(tc);
 
         tc.serializer()
-                .register(MethodCall.class);
+                .register(MethodCall.class)
+                .register(Reply.class);
     }
 
     private static void registerClient(ThreadContext tc) {
@@ -33,7 +33,8 @@ public class Common {
                 .register(Ack.class)
                 .register(Begin.class)
                 .register(Commit.class)
-                .register(Rollback.class);
+                .register(Rollback.class)
+                .register(TransactionContext.class);
     }
 
     private static void registerComm(ThreadContext tc) {

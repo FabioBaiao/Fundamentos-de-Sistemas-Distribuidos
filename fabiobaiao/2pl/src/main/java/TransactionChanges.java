@@ -7,10 +7,15 @@ public class TransactionChanges {
     List<Object> changed;
     public int client;
 
+    Status status;
+
     public TransactionChanges(int id, int client) {
         this.id = id;
         this.client = client;
         this.changed = new ArrayList<>();
     }
 
+    public enum Status {
+        PREPARED
+    }
 }

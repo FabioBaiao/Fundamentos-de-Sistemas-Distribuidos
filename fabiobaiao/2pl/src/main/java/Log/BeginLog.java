@@ -10,7 +10,7 @@ public class BeginLog implements CatalystSerializable{
     public int xid;
     public int client;
 
-    BeginLog() {}
+    public BeginLog() {}
 
     public BeginLog(int xid, int client) {
         this.xid = xid;

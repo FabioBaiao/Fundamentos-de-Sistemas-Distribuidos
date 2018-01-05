@@ -1,4 +1,3 @@
-import Communication.TransactionContext;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
@@ -11,8 +10,8 @@ public class MethodCall implements CatalystSerializable{
     public MethodCall() {}
 
 
-    public MethodCall(TransactionContext xid) {
-        this.xContext = xid;
+    public MethodCall(TransactionContext xContext) {
+        this.xContext = xContext;
     }
 
     @Override

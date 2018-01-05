@@ -1,5 +1,6 @@
 import Communication.*;
 import Log.*;
+import io.atomix.catalyst.concurrent.Futures;
 import io.atomix.catalyst.concurrent.ThreadContext;
 import pt.haslab.ekit.Clique;
 import pt.haslab.ekit.Log;
@@ -7,7 +8,9 @@ import pt.haslab.ekit.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 
 public class ServerRPC {
 
@@ -24,28 +27,39 @@ public class ServerRPC {
         this.activeTransactions = new HashMap<>();
     }
 
-    public boolean register(TransactionContext xContext, int client){
+    private CompletableFuture<Boolean> addResource(TransactionContext xContext, int client){
         TransactionChanges transaction = activeTransactions.get(xContext.xid);
         if (transaction == null) {
-            try {
-                Object o = tc.execute(() -> c.sendAndReceive(0, new AddResourceComm(xContext.xid))).join().get();
 
-                if (o instanceof RollbackComm) {
+            return c.sendAndReceive(0, new AddResourceComm(xContext.xid, client)).thenApply((ans) -> {
+
+                if (ans instanceof RollbackComm) {
                     return false;
                 }
 
-                transaction = new TransactionChanges(xContext.xid, client);
-                activeTransactions.put(xContext.xid, transaction);
+                TransactionChanges transaction2 = new TransactionChanges(xContext.xid, client);
+                activeTransactions.put(xContext.xid, transaction2);
 
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+                return true;
+            });
+
         }
         else if (transaction.client != client) {
-            return false;
+            return Futures.completedFuture(false);
         }
 
-        return true;
+        return Futures.completedFuture(true);
+    }
+
+    public <Object> CompletableFuture<Object> register(TransactionContext xContext, Integer from, Supplier<Object> c) {
+        return addResource(xContext, from).thenApply((res) -> {
+            if (res == false) {
+                return (Object) new Rollback();
+            }
+            else {
+                return c.get();
+            }
+        });
     }
 
     public void init() {
@@ -55,82 +69,82 @@ public class ServerRPC {
         rpcHandlers();
 
         try {
-            tc.execute(() -> c.open()).join().get();
             tc.execute(() -> l.open()).join().get();
+            tc.execute(() -> c.open()).join().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+        }
+
+        for (TransactionChanges transaction : activeTransactions.values()) {
+            switch (transaction.status) {
+                case PREPARED:
+                    tc.execute(() -> c.send(0, new OkComm(transaction.id)));
+                    break;
+            }
         }
     }
 
     private void rpcHandlers() {
-        c.handler(PrepareComm.class, (from, recv) -> {
-            TransactionChanges transaction = activeTransactions.get(recv.xid);
-            if (transaction == null) {
-                // Não conhecer uma transação em que participou significa que esta deve abortar
-                // Não é necessário guardar nada no log
-                tc.execute(() -> {
+        tc.execute(() -> {
+            c.handler(PrepareComm.class, (from, recv) -> {
+                TransactionChanges transaction = activeTransactions.get(recv.xid);
+                if (transaction == null) {
+                    // Não conhecer uma transação em que participou significa que esta deve abortar
+                    // Não é necessário guardar nada no log
                     c.send(from, new NotOkComm(recv.xid));
-                });
-            }
-            else {
-                try {
-                    int index = tc.execute(() ->
-                            // adicionar objetos alterados
-                            // adicionar objetos com lock
-                            l.append(new PreparedLog(transaction.id, transaction.client, new ArrayList<>()))
-                    ).join().get();
+                }
+                else if (transaction.status == TransactionChanges.Status.PREPARED) {
+                    c.send(from, new OkComm(recv.xid));
+                }
+                else {
+                    try {
+                        // adicionar objetos alterados
+                        // adicionar objetos com lock
+                        l.append(new PreparedLog(transaction.id, transaction.client, new ArrayList<>())).get();
+                        transaction.status = TransactionChanges.Status.PREPARED;
 
+                        System.out.println("Appended");
+                        Thread.sleep(5000);
 
-                    tc.execute(() -> {
                         c.send(from, new OkComm(recv.xid));
-                    });
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
 
-        c.handler(CommitComm.class, (from, recv) -> {
-            if (activeTransactions.containsKey(recv.xid)) {
-                try {
-                    TransactionChanges transaction = activeTransactions.get(recv.xid);
-                    int index = tc.execute(() ->
-                            l.append(new CommitLog(recv.xid))
-                    ).join().get();
+            c.handler(CommitComm.class, (from, recv) -> {
+                if (activeTransactions.containsKey(recv.xid)) {
+                    try {
+                        TransactionChanges transaction = activeTransactions.get(recv.xid);
+                        l.append(new CommitLog(recv.xid)).get();
 
-
-                    tc.execute(() -> {
                         c.send(from, new CommitedComm(recv.xid));
-                    });
-                    // persistir alterações ??
-                    // libertar locks
-                    // terminar transação
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
+                        // libertar locks
+                        // terminar transação
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            else {
-                // Commit já foi feito
-                tc.execute(() -> {
+                else {
+                    // Commit já foi feito
                     c.send(from, new CommitedComm(recv.xid));
-                });
-            }
-        });
-
-        c.handler(RollbackComm.class, (from, recv) -> {
-            if (activeTransactions.containsKey(recv.xid)) {
-                try {
-                    tc.execute(() ->
-                            l.append(new AbortLog(recv.xid))
-                    ).join().get();
-
-                    // recover initial status
-                    // release locks of transaction
-                    // terminar transação
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
                 }
-            }
+            });
+
+            c.handler(RollbackComm.class, (from, recv) -> {
+                if (activeTransactions.containsKey(recv.xid)) {
+                    try {
+                        l.append(new AbortLog(recv.xid)).get();
+
+                        // recover initial status
+                        // release locks of transaction
+                        // terminar transação
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         });
     }
 
@@ -138,6 +152,7 @@ public class ServerRPC {
         l.handler(PreparedLog.class, (index, p) -> {
             TransactionChanges transaction = new TransactionChanges(p.xid, p.client);
             activeTransactions.put(p.xid, transaction);
+            transaction.status = TransactionChanges.Status.PREPARED;
         });
 
 

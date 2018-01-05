@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Wed Dec 27 19:03:11 WET 2017:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0160-995b-6401-000006506450 
-on database directory /home/fabiobaiao/FSD/Aula8/2pl/0 with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
+Fri Jan 05 02:59:17 WET 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0160-c442-22f0-000005b1e0a8 
+on database directory /home/fabiobaiao/FSD/TP/fabiobaiao/2pl/2 with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
 Loaded from file:/home/fabiobaiao/.m2/repository/org/apache/derby/derby/10.13.1.1/derby-10.13.1.1.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_151-b12
-user.dir=/home/fabiobaiao/FSD/Aula8/2pl
+user.dir=/home/fabiobaiao/FSD/TP/fabiobaiao/2pl
 os.name=Linux
 os.arch=amd64
 os.version=4.13.0-21-generic
