@@ -1,14 +1,16 @@
 package bank;
 
+import common.ObjRef;
+import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
-import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
 public class AccountPayReq extends Req {
-	double amount;
-	String description;
-	ObjRef dstRef;
+	private double amount;
+	private String description;
+
+    private ObjRef dstRef;
 
 	public AccountPayReq() {}
 
@@ -18,6 +20,10 @@ public class AccountPayReq extends Req {
 		this.description = description;
 		this.dstRef = dstRef;
 	}
+
+    public double getAmount() { return amount; }
+    public String getDescription() { return description; }
+    public ObjRef getDstRef() { return dstRef; }
 
 	@Override
 	public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {

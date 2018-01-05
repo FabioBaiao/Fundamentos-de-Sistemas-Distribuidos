@@ -1,16 +1,17 @@
 package bookstore;
 
-import java.util.Collections;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
+import common.Rep;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
+import java.util.Collections;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 public class StoreGetOrderHistoryRep extends Rep {
 
-    SortedSet<Order> orderHistory;
+    private SortedSet<Order> orderHistory;
 
     public StoreGetOrderHistoryRep() {}
     
@@ -22,6 +23,8 @@ public class StoreGetOrderHistoryRep extends Rep {
         super(error);
         this.orderHistory = Collections.emptySortedSet();
     }
+
+    public SortedSet<Order> getOrderHistory() { return orderHistory; }
 
     @Override
     public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {

@@ -1,11 +1,12 @@
 package bookstore;
 
+import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
 public class CartAddReq extends Req {
-	Book book;
+	private Book book;
 
 	public CartAddReq() {}
 
@@ -14,7 +15,9 @@ public class CartAddReq extends Req {
 		this.book = book;
 	}
 
-	@Override
+    public Book getBook() { return book; }
+
+    @Override
 	public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {
 		super.writeObject(bufferOutput, serializer);
 		serializer.writeObject(book, bufferOutput);

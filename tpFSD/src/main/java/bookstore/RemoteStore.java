@@ -1,5 +1,6 @@
 package bookstore;
 
+import common.DistributedObjectsRuntime;
 import io.atomix.catalyst.transport.Address;
 
 import java.util.concurrent.ExecutionException;
@@ -24,7 +25,7 @@ public class RemoteStore implements Store {
                     dor.cons.get(a).sendAndReceive(new StoreSearchReq(id, title))
             ).join().get();
             
-            return r.book;
+            return r.getBook();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -38,7 +39,7 @@ public class RemoteStore implements Store {
                     dor.cons.get(a).sendAndReceive(new StoreMakeCartReq(id, clientId))
             ).join().get();
             
-            return (Cart) dor.objImport(r.ref);
+            return (Cart) dor.objImport(r.getCartRef());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -52,7 +53,7 @@ public class RemoteStore implements Store {
                     dor.cons.get(a).sendAndReceive(new StoreGetOrderHistoryReq(id, clientId))
             ).join().get();
 
-            return r.orderHistory;
+            return r.getOrderHistory();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }

@@ -1,11 +1,14 @@
 package bank;
 
+import common.Req;
+
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
 public class AccountCreditReq extends Req {
-	double amount;
+
+    private double amount;
 
 	public AccountCreditReq() {}
 	
@@ -14,7 +17,9 @@ public class AccountCreditReq extends Req {
 		this.amount = amount;
 	}
 
-	@Override
+    public double getAmount() { return amount; }
+
+    @Override
 	public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {
 		super.writeObject(bufferOutput, serializer);
 		bufferOutput.writeDouble(amount);

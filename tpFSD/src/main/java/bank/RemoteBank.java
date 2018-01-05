@@ -1,5 +1,7 @@
 package bank;
 
+import common.DistributedObjectsRuntime;
+import common.ObjRef;
 import io.atomix.catalyst.transport.Address;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class RemoteBank implements Bank {
 				dor.cons.get(a).sendAndReceive(new BankGetNameReq(id))
 			).join().get();
 			
-			return r.name;
+			return r.getName();
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
@@ -34,10 +36,11 @@ public class RemoteBank implements Bank {
 	public Account getAccount(int accountNo) {
 		try {
 			BankGetAccountRep r = (BankGetAccountRep) dor.tc.execute(() ->
-				dor.cons.get(a).sendAndReceive(new BankGetAccountReq(id))
+				dor.cons.get(a).sendAndReceive(new BankGetAccountReq(id, accountNo))
 			).join().get();
-			
-			return (r.ref == null) ? null : (Account) dor.objImport(r.ref);
+
+			ObjRef accountRef = r.getAccountRef();
+			return (accountRef == null) ? null : (Account) dor.objImport(accountRef);
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
@@ -64,11 +67,11 @@ public class RemoteBank implements Bank {
 					dor.cons.get(a).sendAndReceive(new AccountGetNoReq(id))
 				).join().get();
 				
-				return r.no;
+				return r.getNo();
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
-			return null;
+			return -1;
 		}
 
 		@Override
@@ -78,7 +81,7 @@ public class RemoteBank implements Bank {
 					dor.cons.get(a).sendAndReceive(new AccountGetBalanceReq(id))
 				).join().get();
 				
-				return r.balance;
+				return r.getBalance();
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
@@ -92,7 +95,7 @@ public class RemoteBank implements Bank {
 					dor.cons.get(a).sendAndReceive(new AccountGetPaymentHistoryReq(id))
 				).join().get();
 			
-				return r.paymentHistory;
+				return r.getPaymentHistory();
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
@@ -103,7 +106,7 @@ public class RemoteBank implements Bank {
 		public void credit(double amount) {
 			try {
 				AccountCreditRep r = (AccountCreditRep) dor.tc.execute(() ->
-					dor.cons.get(a).sendAndReceive(new AccountCreditReq(id))
+					dor.cons.get(a).sendAndReceive(new AccountCreditReq(id, amount))
 				).join().get();
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
@@ -114,7 +117,7 @@ public class RemoteBank implements Bank {
 		public void debit(double amount) {
 			try {
 				AccountDebitRep r = (AccountDebitRep) dor.tc.execute(() ->
-					dor.cons.get(a).sendAndReceive(new AccountDebitReq(id))
+					dor.cons.get(a).sendAndReceive(new AccountDebitReq(id, amount))
 				).join().get();
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();

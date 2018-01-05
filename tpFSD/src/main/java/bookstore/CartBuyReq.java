@@ -1,12 +1,14 @@
 package bookstore;
 
+import common.ObjRef;
+import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
 public class CartBuyReq extends Req {
-	ObjRef srcAccountRef;
-	String description;
+	private ObjRef srcAccountRef;
+	private String description;
 
 	public CartBuyReq() {}
 
@@ -16,7 +18,10 @@ public class CartBuyReq extends Req {
 		this.description = description;
 	}
 
-	@Override
+    public ObjRef getSrcAccountRef() { return srcAccountRef; }
+    public String getDescription() { return description; }
+
+    @Override
 	public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {
 		super.writeObject(bufferOutput, serializer);
 		serializer.writeObject(srcAccountRef, bufferOutput);

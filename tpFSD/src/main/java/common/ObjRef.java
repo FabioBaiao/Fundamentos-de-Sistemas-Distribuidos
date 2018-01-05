@@ -1,3 +1,5 @@
+package common;
+
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
@@ -11,11 +13,15 @@ public class ObjRef implements CatalystSerializable {
 
     public ObjRef() {}
 
-    ObjRef(Address address, int id, String cls) {
+    public ObjRef(Address address, int id, String cls) {
         this.address = address;
         this.id = id;
         this.cls = cls;
     }
+
+    public Address getAddress() { return address; }
+    public int getId() { return id; }
+    public String getCls() { return cls; }
 
     @Override
     public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {

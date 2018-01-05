@@ -1,15 +1,18 @@
 package bookstore;
 
+import common.Rep;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
 public class CartBuyRep extends Rep {
-	Order order;
+	private Order order;
 
 	public CartBuyRep() {}
 	public CartBuyRep(Order order) { this.order = order; }
 	public CartBuyRep(String error) { super(error); }
+
+	public Order getOrder() { return order; }
 
 	@Override
 	public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {

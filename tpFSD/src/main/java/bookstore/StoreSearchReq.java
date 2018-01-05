@@ -1,12 +1,12 @@
 package bookstore;
 
+import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
 public class StoreSearchReq extends Req {
-    int storeId;
-    String title;
+    private String title;
 
     public StoreSearchReq() {}
 
@@ -14,6 +14,8 @@ public class StoreSearchReq extends Req {
         super(storeId);
         this.title = title;
     }
+
+    public String getTitle() { return title; }
 
     @Override
     public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {

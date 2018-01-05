@@ -1,15 +1,19 @@
 package bank;
 
+import common.Rep;
+
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
 public class AccountGetBalanceRep extends Rep {
-	double balance;
+	private double balance;
 
 	public AccountGetBalanceRep() {}
 	public AccountGetBalanceRep(double balance) { this.balance = balance; }
 	public AccountGetBalanceRep(String error) { super(error); }
+
+	public double getBalance() { return balance; }
 
 	@Override
 	public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {

@@ -2,6 +2,8 @@ package bookstore;
 
 import bank.Bank;
 import bank.RemoteBank;
+import common.DistributedObjectsRuntime;
+import common.ObjRef;
 import io.atomix.catalyst.transport.Address;
 
 import java.util.Set;
@@ -23,10 +25,10 @@ public class RemoteCart implements Cart {
     public boolean add(Book b) {
         try {
             CartAddRep r = (CartAddRep) dor.tc.execute(() ->
-                dor.cons.get(a).sendAndReceive(new CartAddReq(id, ref))
+                dor.cons.get(a).sendAndReceive(new CartAddReq(id, b))
             ).join().get();
             
-            return r.added;
+            return r.getAdded();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -51,7 +53,7 @@ public class RemoteCart implements Cart {
     public void clear() {
         try {
             CartClearRep r = (CartClearRep) dor.tc.execute(() ->
-                dor.cons.get(a).sendAndReceive(new CartClearReq(id, b))
+                dor.cons.get(a).sendAndReceive(new CartClearReq(id))
             ).join().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -82,7 +84,7 @@ public class RemoteCart implements Cart {
                 dor.cons.get(a).sendAndReceive(new CartBuyReq(id, srcRef, paymentDescription))
             ).join().get();
             
-            return r.order;
+            return r.getOrder();
         } catch (InterruptedException | ExecutionException | ClassCastException e) {
             e.printStackTrace();
         }

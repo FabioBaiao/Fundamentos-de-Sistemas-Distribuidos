@@ -1,12 +1,13 @@
 package bookstore;
 
+import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
 public class StoreGetOrderHistoryReq extends Req {
 
-    int clientId;
+    private int clientId;
 
     public StoreGetOrderHistoryReq() {}
 
@@ -14,6 +15,8 @@ public class StoreGetOrderHistoryReq extends Req {
         super(storeId);
         this.clientId = clientId;
     }
+
+    public int getClientId() { return clientId; }
 
     @Override
     public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {
