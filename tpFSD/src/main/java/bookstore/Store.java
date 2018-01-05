@@ -1,9 +1,11 @@
 package bookstore;
 
+import twophasecommit.TransactionContext;
+
 import java.util.SortedSet;
 
 public interface Store {
-	Book search(String title);
-	Cart newCart(int clientId);
-	SortedSet<Order> getOrderHistory(int clientId);
+	Book search(TransactionContext txCtxt, String title);
+	Cart newCart(TransactionContext txCtxt, int clientId);
+	SortedSet<Order> getOrderHistory(TransactionContext txCtxt, int clientId);
 }

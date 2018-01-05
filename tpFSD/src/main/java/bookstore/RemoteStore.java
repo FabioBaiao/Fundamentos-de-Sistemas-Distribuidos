@@ -2,6 +2,7 @@ package bookstore;
 
 import common.DistributedObjectsRuntime;
 import io.atomix.catalyst.transport.Address;
+import twophasecommit.TransactionContext;
 
 import java.util.concurrent.ExecutionException;
 import java.util.SortedSet;
@@ -19,10 +20,10 @@ public class RemoteStore implements Store {
     }
 
     @Override
-    public Book search(String title) {
+    public Book search(TransactionContext txCtxt, String title) {
         try {
             StoreSearchRep r = (StoreSearchRep) dor.tc.execute(() ->
-                    dor.cons.get(a).sendAndReceive(new StoreSearchReq(id, title))
+                    dor.cons.get(a).sendAndReceive(new StoreSearchReq(txCtxt, id, title))
             ).join().get();
             
             return r.getBook();
@@ -33,10 +34,10 @@ public class RemoteStore implements Store {
     }
 
     @Override
-    public Cart newCart(int clientId) {
+    public Cart newCart(TransactionContext txCtxt, int clientId) {
         try {
             StoreMakeCartRep r = (StoreMakeCartRep) dor.tc.execute(() ->
-                    dor.cons.get(a).sendAndReceive(new StoreMakeCartReq(id, clientId))
+                    dor.cons.get(a).sendAndReceive(new StoreMakeCartReq(txCtxt, id, clientId))
             ).join().get();
             
             return (Cart) dor.objImport(r.getCartRef());
@@ -47,10 +48,10 @@ public class RemoteStore implements Store {
     }
 
     @Override
-    public SortedSet<Order> getOrderHistory(int clientId) {
+    public SortedSet<Order> getOrderHistory(TransactionContext txCtxt, int clientId) {
         try {
             StoreGetOrderHistoryRep r = (StoreGetOrderHistoryRep) dor.tc.execute(() -> 
-                    dor.cons.get(a).sendAndReceive(new StoreGetOrderHistoryReq(id, clientId))
+                    dor.cons.get(a).sendAndReceive(new StoreGetOrderHistoryReq(txCtxt, id, clientId))
             ).join().get();
 
             return r.getOrderHistory();

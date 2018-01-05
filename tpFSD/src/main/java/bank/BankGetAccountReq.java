@@ -4,14 +4,15 @@ import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
+import twophasecommit.TransactionContext;
 
 public class BankGetAccountReq extends Req {
 	private int accountNo;
 
 	public BankGetAccountReq() {}
 
-	public BankGetAccountReq(int bankId, int accountNo) {
-		super(bankId);
+	public BankGetAccountReq(TransactionContext txCtxt, int bankId, int accountNo) {
+		super(txCtxt, bankId);
 		this.accountNo = accountNo;
 	}
 

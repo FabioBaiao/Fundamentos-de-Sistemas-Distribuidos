@@ -1,8 +1,9 @@
 package bank;
 
 import common.Req;
+import twophasecommit.TransactionContext;
 
 public class AccountGetNoReq extends Req {
 	public AccountGetNoReq() {}
-	public AccountGetNoReq(int accountId) { super(accountId); }
+	public AccountGetNoReq(TransactionContext txCtxt, int accountId) { super(txCtxt, accountId); }
 }

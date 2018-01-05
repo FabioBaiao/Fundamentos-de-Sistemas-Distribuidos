@@ -44,7 +44,7 @@ public class RemoteBank implements Bank {
 		return null;
 	}
 
-	public static class RemoteAccount implements Account {
+	public static class RemoteAccount implements Bank.Account {
 		private final DistributedObjectsRuntime dor;
 		private final int id;
 		private final Address a;
@@ -54,6 +54,8 @@ public class RemoteBank implements Bank {
 			this.id = id;
 			this.a = a;
 		}
+
+		public ObjRef getObjRef() { return new ObjRef(a, id, "Bank.Account"); }
 
 		@Override
 		public int getNo() {

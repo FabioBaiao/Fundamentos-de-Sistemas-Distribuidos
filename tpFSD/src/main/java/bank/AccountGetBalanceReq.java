@@ -1,8 +1,9 @@
 package bank;
 
 import common.Req;
+import twophasecommit.TransactionContext;
 
 public class AccountGetBalanceReq extends Req {
 	public AccountGetBalanceReq() {}
-	public AccountGetBalanceReq(int accountId) { super(accountId); }
+	public AccountGetBalanceReq(TransactionContext txCtxt, int accountId) { super(txCtxt, accountId); }
 }

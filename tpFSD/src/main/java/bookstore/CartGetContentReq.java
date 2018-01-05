@@ -1,8 +1,9 @@
 package bookstore;
 
 import common.Req;
+import twophasecommit.TransactionContext;
 
 public class CartGetContentReq extends Req {
 	CartGetContentReq() {}
-	CartGetContentReq(int cartId) { super(cartId); }
+	CartGetContentReq(TransactionContext txCtxt, int cartId) { super(txCtxt, cartId); }
 }

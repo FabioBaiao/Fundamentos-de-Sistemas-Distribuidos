@@ -4,14 +4,15 @@ import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
+import twophasecommit.TransactionContext;
 
 public class StoreSearchReq extends Req {
     private String title;
 
     public StoreSearchReq() {}
 
-    public StoreSearchReq(int storeId, String title) {
-        super(storeId);
+    public StoreSearchReq(TransactionContext txCtxt, int storeId, String title) {
+        super(txCtxt, storeId);
         this.title = title;
     }
 

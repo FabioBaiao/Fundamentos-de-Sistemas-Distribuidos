@@ -1,6 +1,7 @@
 package bookstore;
 
 import bank.Bank;
+import twophasecommit.TransactionContext;
 
 import java.util.*;
 
@@ -23,7 +24,7 @@ public class LocalStore implements Store {
     }
 
     @Override
-    public Book search(String title) {
+    public Book search(TransactionContext txCtxt, String title) {
         for (Book b : books.values())
             if (b.getTitle().equals(title))
                 return b;
@@ -31,12 +32,12 @@ public class LocalStore implements Store {
     }
 
     @Override
-    public Cart newCart(int clientId) {
+    public Cart newCart(TransactionContext txCtxt, int clientId) {
         return new LocalCart(clientId);
     }
 
     @Override
-    public SortedSet<Order> getOrderHistory(int clientId) {
+    public SortedSet<Order> getOrderHistory(TransactionContext txCtxt, int clientId) {
         return orderHistory.get(clientId);
     }
 
@@ -51,33 +52,31 @@ public class LocalStore implements Store {
         }
 
         @Override
-        public boolean add(Book b) {
+        public boolean add(TransactionContext txCtxt, Book b) {
             return content.add(b);
         }
 
         @Override
-        public boolean remove(Book b) {
+        public boolean remove(TransactionContext txCtxt, Book b) {
             return content.remove(b);
         }
 
         @Override
-        public void clear() {
+        public void clear(TransactionContext txCtxt) {
             content.clear();
         }
 
         @Override
-        public Set<Book> getContent() {
-            return content;
-        }
+        public Set<Book> getContent(TransactionContext txCtxt) { return content; }
 
         @Override
-        public Order buy(Bank.Account srcAccount, String paymentDescription) {
+        public Order buy(TransactionContext txCtxt, Bank.Account srcAccount, String paymentDescription) {
             double total = 0.0;
 
             for (Book b : content)
                 total += b.getPrice();
 
-            srcAccount.pay(total, paymentDescription, LocalStore.this.storeAccount);
+            srcAccount.pay(txCtxt, total, paymentDescription, LocalStore.this.storeAccount);
 
             SortedSet<Order> clientOrders = LocalStore.this.orderHistory.get(clientId);
             if (clientOrders == null) { // the client has no previous orders

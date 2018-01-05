@@ -5,6 +5,7 @@ import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
+import twophasecommit.TransactionContext;
 
 public class CartBuyReq extends Req {
 	private ObjRef srcAccountRef;
@@ -12,8 +13,8 @@ public class CartBuyReq extends Req {
 
 	public CartBuyReq() {}
 
-	public CartBuyReq(int cartId, ObjRef srcAccountRef, String description) {
-		super(cartId);
+	public CartBuyReq(TransactionContext txCtxt, int cartId, ObjRef srcAccountRef, String description) {
+		super(txCtxt, cartId);
 		this.srcAccountRef = srcAccountRef;
 		this.description = description;
 	}

@@ -5,6 +5,7 @@ import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
+import twophasecommit.TransactionContext;
 
 public class AccountPayReq extends Req {
 	private double amount;
@@ -14,8 +15,8 @@ public class AccountPayReq extends Req {
 
 	public AccountPayReq() {}
 
-	public AccountPayReq(int accountId, double amount, String description, ObjRef dstRef) {
-		super(accountId);
+	public AccountPayReq(TransactionContext txCtxt, int accountId, double amount, String description, ObjRef dstRef) {
+		super(txCtxt, accountId);
 		this.amount = amount;
 		this.description = description;
 		this.dstRef = dstRef;

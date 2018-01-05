@@ -5,14 +5,15 @@ import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
+import twophasecommit.TransactionContext;
 
 public class AccountDebitReq extends Req {
 	private double amount;
 
 	public AccountDebitReq() {}
 	
-	public AccountDebitReq(int accountId, double amount) {
-		super(accountId);
+	public AccountDebitReq(TransactionContext txCtxt, int accountId, double amount) {
+		super(txCtxt, accountId);
 		this.amount = amount;
 	}
 

@@ -4,14 +4,15 @@ import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
+import twophasecommit.TransactionContext;
 
 public class CartAddReq extends Req {
-	private Book book;
+
+    private Book book;
 
 	public CartAddReq() {}
-
-	public CartAddReq(int cartId, Book book) {
-		super(cartId);
+	public CartAddReq(TransactionContext txCtxt, int cartId, Book book) {
+		super(txCtxt, cartId);
 		this.book = book;
 	}
 

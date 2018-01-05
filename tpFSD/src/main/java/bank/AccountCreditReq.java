@@ -5,6 +5,7 @@ import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
+import twophasecommit.TransactionContext;
 
 public class AccountCreditReq extends Req {
 
@@ -12,8 +13,8 @@ public class AccountCreditReq extends Req {
 
 	public AccountCreditReq() {}
 	
-	public AccountCreditReq(int accountId, double amount) {
-		super(accountId);
+	public AccountCreditReq(TransactionContext txCtxt, int accountId, double amount) {
+		super(txCtxt, accountId);
 		this.amount = amount;
 	}
 

@@ -1,8 +1,9 @@
 package bank;
 
 import common.Req;
+import twophasecommit.TransactionContext;
 
 public class AccountGetPaymentHistoryReq extends Req {
 	public AccountGetPaymentHistoryReq() {}
-	public AccountGetPaymentHistoryReq(int accountId) { super(accountId); }
+	public AccountGetPaymentHistoryReq(TransactionContext txCtxt, int accountId) { super(txCtxt, accountId); }
 }

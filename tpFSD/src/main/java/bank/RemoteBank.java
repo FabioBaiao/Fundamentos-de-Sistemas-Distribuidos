@@ -3,6 +3,7 @@ package bank;
 import common.DistributedObjectsRuntime;
 import common.ObjRef;
 import io.atomix.catalyst.transport.Address;
+import twophasecommit.TransactionContext;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -19,10 +20,10 @@ public class RemoteBank implements Bank {
 	}
 
 	@Override
-	public String getName() {
+	public String getName(TransactionContext txCtxt) {
 		try {
 			BankGetNameRep r = (BankGetNameRep) dor.tc.execute(() ->
-				dor.cons.get(a).sendAndReceive(new BankGetNameReq(id))
+				dor.cons.get(a).sendAndReceive(new BankGetNameReq(txCtxt, id))
 			).join().get();
 			
 			return r.getName();
@@ -33,10 +34,10 @@ public class RemoteBank implements Bank {
 	}
 
 	@Override
-	public Account getAccount(int accountNo) {
+	public Account getAccount(TransactionContext txCtxt, int accountNo) {
 		try {
 			BankGetAccountRep r = (BankGetAccountRep) dor.tc.execute(() ->
-				dor.cons.get(a).sendAndReceive(new BankGetAccountReq(id, accountNo))
+				dor.cons.get(a).sendAndReceive(new BankGetAccountReq(txCtxt, id, accountNo))
 			).join().get();
 
 			ObjRef accountRef = r.getAccountRef();
@@ -61,10 +62,10 @@ public class RemoteBank implements Bank {
 		public ObjRef getObjRef() { return new ObjRef(a, id, "Bank.Account"); }
 
 		@Override
-		public int getNo() {
+		public int getNo(TransactionContext txCtxt) {
 			try {
 				AccountGetNoRep r = (AccountGetNoRep) dor.tc.execute(() ->
-					dor.cons.get(a).sendAndReceive(new AccountGetNoReq(id))
+					dor.cons.get(a).sendAndReceive(new AccountGetNoReq(txCtxt, id))
 				).join().get();
 				
 				return r.getNo();
@@ -75,10 +76,10 @@ public class RemoteBank implements Bank {
 		}
 
 		@Override
-		public double getBalance() {
+		public double getBalance(TransactionContext txCtxt) {
 			try {
 				AccountGetBalanceRep r = (AccountGetBalanceRep) dor.tc.execute(() ->
-					dor.cons.get(a).sendAndReceive(new AccountGetBalanceReq(id))
+					dor.cons.get(a).sendAndReceive(new AccountGetBalanceReq(txCtxt, id))
 				).join().get();
 				
 				return r.getBalance();
@@ -89,10 +90,10 @@ public class RemoteBank implements Bank {
 		}
 
 		@Override
-		public List<Payment> getPaymentHistory() {
+		public List<Payment> getPaymentHistory(TransactionContext txCtxt) {
 			try {
 				AccountGetPaymentHistoryRep r = (AccountGetPaymentHistoryRep) dor.tc.execute(() ->
-					dor.cons.get(a).sendAndReceive(new AccountGetPaymentHistoryReq(id))
+					dor.cons.get(a).sendAndReceive(new AccountGetPaymentHistoryReq(txCtxt, id))
 				).join().get();
 			
 				return r.getPaymentHistory();
@@ -103,10 +104,10 @@ public class RemoteBank implements Bank {
 		}
 
 		@Override
-		public void credit(double amount) {
+		public void credit(TransactionContext txCtxt, double amount) {
 			try {
 				AccountCreditRep r = (AccountCreditRep) dor.tc.execute(() ->
-					dor.cons.get(a).sendAndReceive(new AccountCreditReq(id, amount))
+					dor.cons.get(a).sendAndReceive(new AccountCreditReq(txCtxt, id, amount))
 				).join().get();
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
@@ -114,10 +115,10 @@ public class RemoteBank implements Bank {
 		}
 
 		@Override
-		public void debit(double amount) {
+		public void debit(TransactionContext txCtxt, double amount) {
 			try {
 				AccountDebitRep r = (AccountDebitRep) dor.tc.execute(() ->
-					dor.cons.get(a).sendAndReceive(new AccountDebitReq(id, amount))
+					dor.cons.get(a).sendAndReceive(new AccountDebitReq(txCtxt, id, amount))
 				).join().get();
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
@@ -125,13 +126,13 @@ public class RemoteBank implements Bank {
 		}
 
 		@Override
-		public void pay(double amount, String description, Account dst) {
+		public void pay(TransactionContext txCtxt, double amount, String description, Account dst) {
 			try {
 				RemoteAccount remoteDst = (RemoteAccount) dst;
 				ObjRef dstRef = new ObjRef(remoteDst.a, remoteDst.id, "Bank.Account");
 
 				AccountPayRep r = (AccountPayRep) dor.tc.execute(() ->
-					dor.cons.get(a).sendAndReceive(new AccountPayReq(id, amount, description, dstRef))
+					dor.cons.get(a).sendAndReceive(new AccountPayReq(txCtxt, id, amount, description, dstRef))
 				).join().get();
 			} catch (InterruptedException | ExecutionException | ClassCastException e) {
 				e.printStackTrace();

@@ -4,6 +4,7 @@ import common.Req;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
+import twophasecommit.TransactionContext;
 
 public class StoreMakeCartReq extends Req {
 
@@ -11,8 +12,8 @@ public class StoreMakeCartReq extends Req {
 
 	public StoreMakeCartReq() {}
 	
-	public StoreMakeCartReq(int storeId, int clientId) {
-		super(storeId);
+	public StoreMakeCartReq(TransactionContext txCtxt, int storeId, int clientId) {
+		super(txCtxt, storeId);
 		this.clientId = clientId;
 	}
 
