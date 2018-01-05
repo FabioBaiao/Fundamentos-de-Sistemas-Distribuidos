@@ -27,4 +27,8 @@ public class CartRemoveReq extends Req {
 		super.readObject(bufferInput, serializer);
 		this.book = serializer.readObject(bufferInput);
 	}
+
+	public Book getBook() {
+		return book;
+	}
 }

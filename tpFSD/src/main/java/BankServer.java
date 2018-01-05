@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BankServer {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         int id = Common.BANK_SERVER_ID;
 
@@ -25,5 +25,7 @@ public class BankServer {
         Bank bank = new LocalBank("CGD", accounts);
 
         dor.objExport(bank);
+
+        System.out.println("Finished");
     }
 }

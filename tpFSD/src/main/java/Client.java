@@ -21,11 +21,9 @@ public class Client {
         Store store = (Store) dor.objImport(new ObjRef(Common.STORE_SERVER_ID, Common.STORE_ID, "Store"));
 
         TransactionContext xContext = null;
-
         try {
             xContext = dor.begin();
         } catch (ExecutionException | InterruptedException e) {
-            // REPETIR ??
             e.printStackTrace();
         }
 
@@ -35,10 +33,11 @@ public class Client {
 
         try {
             dor.commit(xContext);
-        } catch (InterruptedException | ExecutionException e) {
-            // REPETIR ??
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+
+        System.out.println(b.getTitle());
 
         /*Cart c = store.newCart();
 

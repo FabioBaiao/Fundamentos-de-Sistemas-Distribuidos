@@ -9,9 +9,10 @@ import twophasecommit.TransactionContext;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class StoreServer {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         int id = Common.STORE_SERVER_ID;
 
@@ -21,8 +22,12 @@ public class StoreServer {
 
         Bank bank = (Bank) dor.objImport(new ObjRef(Common.BANK_SERVER_ID, Common.BANK_ID, "Bank"));
 
-        TransactionContext xContext;
-        xContext = dor.begin();
+        TransactionContext xContext = null;
+        try {
+            xContext = dor.begin();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("Begin " + xContext.getXid());
 
@@ -33,11 +38,19 @@ public class StoreServer {
                 account = bank.getAccount(xContext, Common.STORE_ACCOUNT_ID);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                Thread.sleep(2000);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
 
-        dor.commit(xContext);
+        try {
+            dor.commit(xContext);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
         Map<Integer, Book> books = new HashMap<>();
 
