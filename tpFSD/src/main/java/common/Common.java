@@ -1,3 +1,5 @@
+package common;
+
 import io.atomix.catalyst.concurrent.ThreadContext;
 import io.atomix.catalyst.transport.Address;
 import twophasecommit.Begin;

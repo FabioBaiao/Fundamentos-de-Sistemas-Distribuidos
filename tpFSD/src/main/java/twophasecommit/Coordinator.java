@@ -1,4 +1,6 @@
-import twophasecommit.*;
+package twophasecommit;
+
+import common.Common;
 import twophasecommit.communication.*;
 import twophasecommit.logs.*;
 
@@ -14,7 +16,6 @@ import pt.haslab.ekit.Log;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 

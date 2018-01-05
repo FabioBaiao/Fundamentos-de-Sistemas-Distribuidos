@@ -66,7 +66,7 @@ public class Participant {
     }
 
     public void init() {
-        //Common.registerSerializers(tc);
+        //common.Common.registerSerializers(tc);
 
         logHandlers();
         rpcHandlers();
