@@ -1,11 +1,11 @@
 package bookstore;
 
-import common.Rep;
+import common.AbstractRep;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class CartRemoveRep extends Rep {
+public class CartRemoveRep extends AbstractRep {
 	boolean removed;
 
 	public CartRemoveRep() {}

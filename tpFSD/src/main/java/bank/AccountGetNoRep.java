@@ -1,12 +1,12 @@
 package bank;
 
-import common.Rep;
+import common.AbstractRep;
 
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class AccountGetNoRep extends Rep {
+public class AccountGetNoRep extends AbstractRep {
 	private int no;
 
 	public AccountGetNoRep() {}

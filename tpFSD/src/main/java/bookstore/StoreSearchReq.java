@@ -1,12 +1,12 @@
 package bookstore;
 
-import common.Req;
+import common.AbstractReq;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 import twophasecommit.TransactionContext;
 
-public class StoreSearchReq extends Req {
+public class StoreSearchReq extends AbstractReq {
     private String title;
 
     public StoreSearchReq() {}

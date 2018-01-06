@@ -1,6 +1,6 @@
 package bookstore;
 
-import common.Rep;
+import common.AbstractRep;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class StoreGetOrderHistoryRep extends Rep {
+public class StoreGetOrderHistoryRep extends AbstractRep {
 
     private SortedSet<Order> orderHistory;
 

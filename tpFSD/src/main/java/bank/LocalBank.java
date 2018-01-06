@@ -2,10 +2,7 @@ package bank;
 
 import twophasecommit.TransactionContext;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 public class LocalBank implements Bank {
 	private final String name;
@@ -27,7 +24,7 @@ public class LocalBank implements Bank {
 	public static class LocalAccount implements Account {
 		private final int no;
 		private double balance;
-		private List<Payment> paymentHistory;
+		private SortedSet<Payment> paymentHistory;
 
 		public LocalAccount(int no) {
 			this(no, 0.0);
@@ -36,7 +33,7 @@ public class LocalBank implements Bank {
 		public LocalAccount(int no, double initialBalance) {
 			this.no = no;
 			this.balance = initialBalance;
-			this.paymentHistory = new ArrayList<>();
+			this.paymentHistory = new TreeSet<>();
 		}
 
 		@Override
@@ -46,7 +43,7 @@ public class LocalBank implements Bank {
 		public double getBalance(TransactionContext txCtxt) { return balance; }
 
 		@Override
-		public List<Payment> getPaymentHistory(TransactionContext txCtxt) { return paymentHistory; }
+		public SortedSet<Payment> getPaymentHistory(TransactionContext txCtxt) { return paymentHistory; }
 
 		@Override
 		public void credit(TransactionContext txCtxt, double amount) { balance += amount; }

@@ -1,11 +1,11 @@
 package bank;
 
-import common.Rep;
+import common.AbstractRep;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class BankGetNameRep extends Rep {
+public class BankGetNameRep extends AbstractRep {
 	private String name;
 
 	// We can't have both BankGetNameRep(String name) and BankGetNameRep(String error).

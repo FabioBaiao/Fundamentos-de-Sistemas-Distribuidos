@@ -1,8 +1,8 @@
 package bookstore;
 
-import common.Rep;
+import common.AbstractRep;
 
-public class CartClearRep extends Rep {
+public class CartClearRep extends AbstractRep {
 	public CartClearRep() {}
 	public CartClearRep(String error) { super(error); }
 }

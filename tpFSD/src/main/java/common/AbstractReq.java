@@ -6,13 +6,13 @@ import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 import twophasecommit.TransactionContext;
 
-public abstract class Req implements CatalystSerializable {
+public abstract class AbstractReq implements CatalystSerializable {
     private TransactionContext txCtxt;
 	private int objId;
 
-	protected Req() {}
+	protected AbstractReq() {}
 
-	protected Req(TransactionContext txCtxt, int objId) {
+	protected AbstractReq(TransactionContext txCtxt, int objId) {
 	    this.txCtxt = txCtxt;
 	    this.objId = objId;
 	}

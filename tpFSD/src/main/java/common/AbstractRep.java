@@ -5,14 +5,14 @@ import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
-public abstract class Rep implements CatalystSerializable {
+public abstract class AbstractRep implements CatalystSerializable {
 	protected boolean ok;
 	protected String error;
 
-	protected Rep() { this.ok = true; }
+	protected AbstractRep() { this.ok = true; }
 
 	// If an error is provided, ok is false (if the error is null, an unspecified error ocurred)
-	protected Rep(String error) {
+	protected AbstractRep(String error) {
 		this.ok = false;
 		this.error = error;
 	}

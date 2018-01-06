@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import common.Rep;
+import common.AbstractRep;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class CartGetContentRep extends Rep {
+public class CartGetContentRep extends AbstractRep {
 	Set<Book> content;
 
 	public CartGetContentRep() {}

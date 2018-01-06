@@ -1,13 +1,13 @@
 package bank;
 
-import common.Req;
+import common.AbstractReq;
 
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 import twophasecommit.TransactionContext;
 
-public class AccountCreditReq extends Req {
+public class AccountCreditReq extends AbstractReq {
 
     private double amount;
 

@@ -1,12 +1,12 @@
 package bank;
 
-import common.Rep;
+import common.AbstractRep;
 
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class AccountGetBalanceRep extends Rep {
+public class AccountGetBalanceRep extends AbstractRep {
 	private double balance;
 
 	public AccountGetBalanceRep() {}

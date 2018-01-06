@@ -1,29 +1,29 @@
 package bank;
 
-import common.Rep;
+import common.AbstractRep;
 import io.atomix.catalyst.buffer.BufferInput;
 import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.Serializer;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-public class AccountGetPaymentHistoryRep extends Rep {
-	private List<Payment> paymentHistory;
+public class AccountGetPaymentHistoryRep extends AbstractRep {
+	private SortedSet<Payment> paymentHistory;
 
 	public AccountGetPaymentHistoryRep() {}
 
-	public AccountGetPaymentHistoryRep(List<Payment> paymentHistory) {
-		this.paymentHistory = (paymentHistory == null) ? Collections.emptyList() : paymentHistory;
+	public AccountGetPaymentHistoryRep(SortedSet<Payment> paymentHistory) {
+		this.paymentHistory = (paymentHistory == null) ? Collections.emptySortedSet() : paymentHistory;
 	}
 
 	public AccountGetPaymentHistoryRep(String error) {
 		super(error);
-		this.paymentHistory = Collections.emptyList();
+		this.paymentHistory = Collections.emptySortedSet();
 	}
 
-	public List<Payment> getPaymentHistory() { return paymentHistory; }
+	public SortedSet<Payment> getPaymentHistory() { return paymentHistory; }
 
 	@Override
 	public void writeObject(BufferOutput<?> bufferOutput, Serializer serializer) {
@@ -40,7 +40,7 @@ public class AccountGetPaymentHistoryRep extends Rep {
 		super.readObject(bufferInput, serializer);
 
 		final int size = bufferInput.readInt();
-		this.paymentHistory = new ArrayList<>(size);
+		this.paymentHistory = new TreeSet<>();
 		for (int i = 0; i < size; i++) {
 			this.paymentHistory.add(serializer.readObject(bufferInput));
 		}
