@@ -9,9 +9,7 @@ import twophasecommit.logs.AbortLog;
 import twophasecommit.logs.CommitLog;
 import twophasecommit.logs.PreparedLog;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
@@ -29,6 +27,8 @@ public class Participant {
         this.c = c;
         this.l = new Log("" + id);
         this.activeTransactions = new HashMap<>();
+
+        this.changes = new HashMap<>();
     }
 
     private CompletableFuture<Boolean> addResource(TransactionContext xContext, int client){
@@ -120,7 +120,7 @@ public class Participant {
                         l.append(new CommitLog(recv.getXid())).get();
 
                         c.send(from, new CommitedComm(recv.getXid()));
-                        // libertar locks
+                        release(recv.getXid());
 
                         activeTransactions.remove(transaction.getId());
                     } catch (InterruptedException | ExecutionException e) {
@@ -139,7 +139,7 @@ public class Participant {
                         l.append(new AbortLog(recv.getXid())).get();
 
                         // recover initial status
-                        // release locks of transaction
+                        release(recv.getXid());
                         activeTransactions.remove(recv.getXid());
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
@@ -182,5 +182,76 @@ public class Participant {
                 activeTransactions.remove(transaction.getId());
             }
         });
+    }
+
+    Map<Object, LockData> changes;
+
+    public CompletableFuture<Void> acquire(TransactionContext xContext, Object o) {
+        LockData lock = changes.get(o);
+        if (lock == null) {
+            lock = new LockData(xContext.getXid());
+            activeTransactions.get(xContext.getXid()).addChanged(o);
+            changes.put(o, lock);
+        }
+
+        return lock.acquire(xContext.getXid());
+    }
+
+    public void release(int xid) {
+        TransactionChanges transaction = activeTransactions.get(xid);
+        for (Object o : transaction.getChanged()) {
+            LockData lock = changes.get(o);
+            if(lock.release()) {
+                changes.remove(o);
+            }
+        }
+    }
+
+    private class LockData {
+
+        int xid;
+        Queue<Wait> waiting;
+
+        LockData(int xid) {
+            this.xid = xid;
+            this.waiting = new LinkedList<>();
+        }
+
+        public int getXid() {
+            return xid;
+        }
+
+        public CompletableFuture<Void> acquire(int xid) {
+            CompletableFuture<Void> acquired = new CompletableFuture<>();
+            if (this.xid == xid)
+                acquired.complete(null);
+            else
+                waiting.add(new Wait(acquired, xid));
+
+            return acquired;
+
+        }
+
+        public boolean release() {
+            if (waiting.size() == 0) {
+                return true;
+            }
+            else {
+                Wait w = waiting.remove();
+                xid = w.xid;
+                w.compFuture.complete(null);
+                return false;
+            }
+        }
+
+        private class Wait {
+            CompletableFuture<Void> compFuture;
+            int xid;
+
+            Wait(CompletableFuture<Void> compFuture, int xid) {
+                this.compFuture = compFuture;
+                this.xid = xid;
+            }
+        }
     }
 }

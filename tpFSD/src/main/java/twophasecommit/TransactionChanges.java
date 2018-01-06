@@ -25,6 +25,14 @@ public class TransactionChanges {
         return id;
     }
 
+    public List<Object> getChanged() {
+        return changed;
+    }
+
+    public void addChanged(Object o) {
+        this.changed.add(o);
+    }
+
     public enum Status {
         PREPARED
     }
