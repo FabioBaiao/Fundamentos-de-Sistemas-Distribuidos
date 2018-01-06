@@ -54,10 +54,10 @@ public class Participant {
         return Futures.completedFuture(true);
     }
 
-    public <Object> CompletableFuture<Object> register(TransactionContext xContext, Integer from, Supplier<Object> c) {
-        return addResource(xContext, from).thenApply((res) -> {
+    public <Object> CompletableFuture<Object> register(TransactionContext xContext, Integer from, Supplier<CompletableFuture> c) {
+        return addResource(xContext, from).thenCompose((res) -> {
             if (res == false) {
-                return (Object) new Rollback();
+                return Futures.completedFuture((Object) new Rollback());
             }
             else {
                 return c.get();

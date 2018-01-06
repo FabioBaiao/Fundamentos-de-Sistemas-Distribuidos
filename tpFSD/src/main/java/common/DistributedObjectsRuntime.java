@@ -55,6 +55,7 @@ public class DistributedObjectsRuntime {
             storeHandlers();
             cartHandlers();
             bankHandlers();
+            accountHandlers();
             tc.execute(() -> c.open()).join().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -64,129 +65,133 @@ public class DistributedObjectsRuntime {
 
     // Store invocation handlers
     private void storeHandlers() {
+        tc.execute(() -> {
+            c.handler(StoreSearchReq.class, (from, r) -> {
+                return p.register(r.getTransactionContext(), from, () -> {
+                    Store s = (Store) objs.get(r.getObjId());
 
-        c.handler(StoreSearchReq.class, (from, r) -> {
-            return p.register(r.getTransactionContext(), from, () -> {
-                Store s = (Store) objs.get(r.getObjId());
-                Book b = s.search(r.getTransactionContext(), r.getTitle());
-                //                  int bookid = id.incrementAndGet();
-                //                  objs.put(bookid, b);
-                return new StoreSearchRep(b);
+                    return p.acquire(r.getTransactionContext(), s).thenCompose((v) -> {
+                        Book b = s.search(r.getTransactionContext(), r.getTitle());
+                        return Futures.completedFuture(new StoreSearchRep(b));
+                    });
+                });
             });
-        });
 
-        c.handler(StoreMakeCartReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+            c.handler(StoreMakeCartReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-            return p.register(txCtxt, from, () -> {
-                Store s = (Store) objs.get(r.getObjId());
+                return p.register(txCtxt, from, () -> {
+                    Store s = (Store) objs.get(r.getObjId());
 
-                int cartId = id.incrementAndGet();
-                objs.put(cartId, s.newCart(txCtxt, r.getClientId()));
+                    int cartId = id.incrementAndGet();
+                    objs.put(cartId, s.newCart(txCtxt, r.getClientId()));
 
-                return new StoreMakeCartRep(new ObjRef(cliqueId, cartId, "Cart"));
+                    return Futures.completedFuture(new StoreMakeCartRep(new ObjRef(cliqueId, cartId, "Cart")));
+                });
             });
-        });
 
 
-        c.handler(StoreGetOrderHistoryReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+            c.handler(StoreGetOrderHistoryReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-            return p.register(txCtxt, from, () -> {
-                Store s = (Store) objs.get(r.getObjId());
-                SortedSet<Order> orderHistory = s.getOrderHistory(txCtxt, r.getClientId());
+                return p.register(txCtxt, from, () -> {
+                    Store s = (Store) objs.get(r.getObjId());
+                    SortedSet<Order> orderHistory = s.getOrderHistory(txCtxt, r.getClientId());
 
-                return new StoreGetOrderHistoryRep(orderHistory);
+                    return Futures.completedFuture(new StoreGetOrderHistoryRep(orderHistory));
+                });
             });
         });
     }
 
     // Cart invocation handlers
     private void cartHandlers() {
+        tc.execute(() -> {
+            c.handler(CartAddReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-        c.handler(CartAddReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+                return p.register(txCtxt, from, () -> {
+                    Cart cart = (Cart) objs.get(r.getObjId());
+                    boolean added = cart.add(txCtxt, r.getBook());
 
-            return p.register(txCtxt, from, () -> {
-                Cart cart = (Cart) objs.get(r.getObjId());
-                boolean added = cart.add(txCtxt, r.getBook());
-
-                return new CartAddRep(added);
-            });
-        });
-
-        c.handler(CartBuyReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
-
-            return p.register(txCtxt, from, () -> {
-                Cart cart = (Cart) objs.get(r.getObjId());
-                Bank.Account srcAccount = (Bank.Account) objImport(r.getSrcAccountRef());
-                Order o = cart.buy(txCtxt, srcAccount, r.getDescription());
-
-                return new CartBuyRep(o);
-            });
-        });
-
-        c.handler(CartClearReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
-
-            return p.register(txCtxt, from, () -> {
-                Cart cart = (Cart) objs.get(r.getObjId());
-                cart.clear(txCtxt);
-
-                return new CartClearRep();
-            });
-        });
-
-        c.handler(CartGetContentReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
-
-            return p.register(txCtxt, from, () -> {
-                Cart c = (Cart) objs.get(r.getObjId());
-
-                return new CartGetContentRep(c.getContent(txCtxt));
+                    return Futures.completedFuture(new CartAddRep(added));
+                });
             });
 
-        });
+            c.handler(CartBuyReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-        c.handler(CartRemoveReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+                return p.register(txCtxt, from, () -> {
+                    Cart cart = (Cart) objs.get(r.getObjId());
+                    Bank.Account srcAccount = (Bank.Account) objImport(r.getSrcAccountRef());
+                    Order o = cart.buy(txCtxt, srcAccount, r.getDescription());
 
-            return p.register(txCtxt, from, () -> {
-                Cart cart = (Cart) objs.get(r.getObjId());
-                boolean removed = cart.remove(txCtxt, r.getBook());
+                    return Futures.completedFuture(new CartBuyRep(o));
+                });
+            });
 
-                return new CartRemoveRep(removed);
+            c.handler(CartClearReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
+
+                return p.register(txCtxt, from, () -> {
+                    Cart cart = (Cart) objs.get(r.getObjId());
+                    cart.clear(txCtxt);
+
+                    return Futures.completedFuture(new CartClearRep());
+                });
+            });
+
+            c.handler(CartGetContentReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
+
+                return p.register(txCtxt, from, () -> {
+                    Cart c = (Cart) objs.get(r.getObjId());
+
+                    return Futures.completedFuture(new CartGetContentRep(c.getContent(txCtxt)));
+                });
+
+            });
+
+            c.handler(CartRemoveReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
+
+                return p.register(txCtxt, from, () -> {
+                    Cart cart = (Cart) objs.get(r.getObjId());
+                    boolean removed = cart.remove(txCtxt, r.getBook());
+
+                    return Futures.completedFuture(new CartRemoveRep(removed));
+                });
             });
         });
     }
 
     // Bank handlers
     private void bankHandlers() {
+        tc.execute(() -> {
+            c.handler(BankGetAccountReq.class, (from, r) -> {
+                return p.register(r.getTransactionContext(), from, () -> {
+                    Bank b = (Bank) objs.get(r.getObjId());
+                    Bank.Account a = null;
+                    try {
+                        a = b.getAccount(r.getTransactionContext(), r.getAccountNo());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    int accountId = id.incrementAndGet();
 
-        c.handler(BankGetAccountReq.class, (from, r) -> {
-            return p.register(r.getTransactionContext(), from, () -> {
-                Bank b = (Bank) objs.get(r.getObjId());
-                Bank.Account a = null;
-                try {
-                    a = b.getAccount(r.getTransactionContext(), r.getAccountNo());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                int accountId = id.incrementAndGet();
-
-                objs.put(accountId, a);
-                return new BankGetAccountRep(new ObjRef(cliqueId, accountId, "Bank.Account"));
+                    objs.put(accountId, a);
+                    return Futures.completedFuture(new BankGetAccountRep(new ObjRef(cliqueId, accountId, "Bank.Account")));
+                });
             });
-        });
 
-        c.handler(BankGetNameReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+            c.handler(BankGetNameReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-            return p.register(txCtxt, from, () -> {
-                Bank b = (Bank) objs.get(r.getObjId());
+                return p.register(txCtxt, from, () -> {
+                    Bank b = (Bank) objs.get(r.getObjId());
 
-                return new BankGetNameRep(b.getName(txCtxt), null);
+                    return Futures.completedFuture(new BankGetNameRep(b.getName(txCtxt), null));
+                });
             });
         });
     }
@@ -194,68 +199,69 @@ public class DistributedObjectsRuntime {
 
     // Account handlers
     private void accountHandlers() {
+        tc.execute(() -> {
+            c.handler(AccountCreditReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-        c.handler(AccountCreditReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+                return p.register(txCtxt, from, () -> {
+                    Bank.Account a = (Bank.Account) objs.get(r.getObjId());
 
-            return p.register(txCtxt, from, () -> {
-                Bank.Account a = (Bank.Account) objs.get(r.getObjId());
-
-                a.credit(txCtxt, r.getAmount());
-                return new AccountCreditRep();
+                    a.credit(txCtxt, r.getAmount());
+                    return Futures.completedFuture(new AccountCreditRep());
+                });
             });
-        });
 
-        c.handler(AccountDebitReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+            c.handler(AccountDebitReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-            return p.register(txCtxt, from, () -> {
-                Bank.Account a = (Bank.Account) objs.get(r.getObjId());
+                return p.register(txCtxt, from, () -> {
+                    Bank.Account a = (Bank.Account) objs.get(r.getObjId());
 
-                a.debit(txCtxt, r.getAmount());
-                return new AccountDebitRep();
+                    a.debit(txCtxt, r.getAmount());
+                    return Futures.completedFuture(new AccountDebitRep());
+                });
             });
-        });
 
-        c.handler(AccountGetNoReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+            c.handler(AccountGetNoReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-            return p.register(txCtxt, from, () -> {
-                Bank.Account a = (Bank.Account) objs.get(r.getObjId());
+                return p.register(txCtxt, from, () -> {
+                    Bank.Account a = (Bank.Account) objs.get(r.getObjId());
 
-                return new AccountGetNoRep(a.getNo(txCtxt));
+                    return Futures.completedFuture(new AccountGetNoRep(a.getNo(txCtxt)));
+                });
             });
-        });
 
-        c.handler(AccountGetBalanceReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+            c.handler(AccountGetBalanceReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-            return p.register(txCtxt, from, () -> {
-                Bank.Account a = (Bank.Account) objs.get(r.getObjId());
+                return p.register(txCtxt, from, () -> {
+                    Bank.Account a = (Bank.Account) objs.get(r.getObjId());
 
-                return new AccountGetBalanceRep(a.getBalance(txCtxt));
+                    return Futures.completedFuture(new AccountGetBalanceRep(a.getBalance(txCtxt)));
+                });
             });
-        });
 
-        c.handler(AccountGetPaymentHistoryReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+            c.handler(AccountGetPaymentHistoryReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-            return p.register(txCtxt, from, () -> {
-                Bank.Account a = (Bank.Account) objs.get(r.getObjId());
+                return p.register(txCtxt, from, () -> {
+                    Bank.Account a = (Bank.Account) objs.get(r.getObjId());
 
-                return new AccountGetPaymentHistoryRep(a.getPaymentHistory(txCtxt));
+                    return Futures.completedFuture(new AccountGetPaymentHistoryRep(a.getPaymentHistory(txCtxt)));
+                });
             });
-        });
 
-        c.handler(AccountPayReq.class, (from, r) -> {
-            TransactionContext txCtxt = r.getTransactionContext();
+            c.handler(AccountPayReq.class, (from, r) -> {
+                TransactionContext txCtxt = r.getTransactionContext();
 
-            return p.register(txCtxt, from, () -> {
-                Bank.Account srcAccount = (Bank.Account) objs.get(r.getObjId());
-                Bank.Account dstAccount = (Bank.Account) objImport(r.getDstRef());
+                return p.register(txCtxt, from, () -> {
+                    Bank.Account srcAccount = (Bank.Account) objs.get(r.getObjId());
+                    Bank.Account dstAccount = (Bank.Account) objImport(r.getDstRef());
 
-                srcAccount.pay(txCtxt, r.getAmount(), r.getDescription(), dstAccount);
-                return new AccountPayRep();
+                    srcAccount.pay(txCtxt, r.getAmount(), r.getDescription(), dstAccount);
+                    return Futures.completedFuture(new AccountPayRep());
+                });
             });
         });
     }
@@ -287,7 +293,7 @@ public class DistributedObjectsRuntime {
 
             case "Bank":
                 return new RemoteBank(this, ref.cliqueId, ref.objectId);
-            case "Account":
+            case "Bank.Account":
                 return new RemoteBank.RemoteAccount(this, ref.cliqueId, ref.objectId);
             case "Store":
                 return new RemoteStore(this, ref.cliqueId, ref.objectId);
