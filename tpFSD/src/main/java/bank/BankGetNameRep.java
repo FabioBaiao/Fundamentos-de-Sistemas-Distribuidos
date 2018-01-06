@@ -10,7 +10,7 @@ public class BankGetNameRep extends Rep {
 
 	// We can't have both BankGetNameRep(String name) and BankGetNameRep(String error).
 	// One solution is merging them into one constructor; given that a bank must have a
-	// name, (name == null) means that an error ocurred.
+	// name, when (name == null) surely an error ocurred.
 	public BankGetNameRep(String name, String error) {
 		if (name == null) {
 			super.ok = false;
