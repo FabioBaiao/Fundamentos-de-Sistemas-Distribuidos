@@ -1,9 +1,7 @@
 package common;
 
-import bank.BankGetAccountRep;
-import bank.BankGetAccountReq;
-import bookstore.StoreSearchRep;
-import bookstore.StoreSearchReq;
+import bank.*;
+import bookstore.*;
 import io.atomix.catalyst.concurrent.ThreadContext;
 import io.atomix.catalyst.transport.Address;
 import twophasecommit.Begin;
@@ -43,19 +41,50 @@ public class Common {
 
         registerReps(tc);
 
-        tc.serializer().register(ObjRef.class);
+        tc.serializer()
+                .register(Book.class)
+                .register(ObjRef.class);
     }
 
     private static void registerReps(ThreadContext tc) {
         tc.serializer()
-            .register(StoreSearchRep.class)
-            .register(BankGetAccountRep.class);
+                .register(AccountCreditRep.class)
+                .register(AccountDebitRep.class)
+                .register(AccountGetBalanceRep.class)
+                .register(AccountGetNoRep.class)
+                .register(AccountGetPaymentHistoryRep.class)
+                .register(AccountPayRep.class)
+                .register(BankGetAccountRep.class)
+                .register(BankGetNameRep.class)
+                .register(CartAddRep.class)
+                .register(CartBuyRep.class)
+                .register(CartClearRep.class)
+                .register(CartGetContentRep.class)
+                .register(CartRemoveRep.class)
+                .register(StoreGetOrderHistoryRep.class)
+                .register(StoreMakeCartRep.class)
+                .register(StoreSearchRep.class);
     }
 
     private static void registerReqs(ThreadContext tc) {
         tc.serializer()
-                .register(StoreSearchReq.class)
-                .register(BankGetAccountReq.class);
+                .register(AccountCreditReq.class)
+                .register(AccountDebitReq.class)
+                .register(AccountGetBalanceReq.class)
+                .register(AccountGetNoReq.class)
+                .register(AccountGetPaymentHistoryReq.class)
+                .register(AccountPayReq.class)
+                .register(BankGetAccountReq.class)
+                .register(BankGetNameReq.class)
+                .register(CartAddReq.class)
+                .register(CartBuyReq.class)
+                .register(CartClearReq.class)
+                .register(CartGetContentReq.class)
+                .register(CartRemoveReq.class)
+                .register(StoreGetOrderHistoryReq.class)
+                .register(StoreMakeCartReq.class)
+                .register(StoreSearchReq.class);
+
 
     }
 
