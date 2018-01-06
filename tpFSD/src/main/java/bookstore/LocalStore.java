@@ -51,6 +51,8 @@ public class LocalStore implements Store {
             this.content = new HashSet<>();
         }
 
+        public Store getStore() { return LocalStore.this; }
+
         @Override
         public boolean add(TransactionContext txCtxt, Book b) {
             return content.add(b);

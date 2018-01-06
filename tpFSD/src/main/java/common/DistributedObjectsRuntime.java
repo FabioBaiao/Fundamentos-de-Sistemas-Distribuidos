@@ -6,8 +6,6 @@ import io.atomix.catalyst.concurrent.Futures;
 import io.atomix.catalyst.concurrent.SingleThreadContext;
 import io.atomix.catalyst.concurrent.ThreadContext;
 import io.atomix.catalyst.serializer.Serializer;
-import io.atomix.catalyst.transport.Address;
-import io.atomix.catalyst.transport.Connection;
 import io.atomix.catalyst.transport.Transport;
 import io.atomix.catalyst.transport.netty.NettyTransport;
 import pt.haslab.ekit.Clique;
@@ -24,28 +22,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class DistributedObjectsRuntime {
 
+    private static final int COORDINATOR_ID = 0;
+
     public ThreadContext tc;
-    Transport t;
     public Clique c;
+    Transport t;
     int cliqueId;
 
     Map<Integer, Object> objs;
-    AtomicInteger id;
+    AtomicInteger nextId;
 
     Participant p;
 
-    private static final int COORDINATOR_ID = 0;
-
-    public DistributedObjectsRuntime(int id) {
+    public DistributedObjectsRuntime(int cliqueId) {
         this.tc = new SingleThreadContext("srv-%d", new Serializer());
         this.t = new NettyTransport();
-        this.cliqueId = id;
-        this.c = new Clique(t, Clique.Mode.ANY, id, Common.addresses);
+        this.cliqueId = cliqueId;
+        this.c = new Clique(t, Clique.Mode.ANY, cliqueId, Common.addresses);
 
         this.objs = new HashMap<>();
-        this.id = new AtomicInteger(0);
+        this.nextId = new AtomicInteger(0);
 
-        this.p = new Participant(tc, c, id);
+        this.p = new Participant(tc, c, cliqueId);
     }
 
     public void init() {
@@ -69,11 +67,9 @@ public class DistributedObjectsRuntime {
             c.handler(StoreSearchReq.class, (from, r) -> {
                 return p.register(r.getTransactionContext(), from, () -> {
                     Store s = (Store) objs.get(r.getObjId());
+                    Book b = s.search(r.getTransactionContext(), r.getTitle());
 
-                    return p.acquire(r.getTransactionContext(), s).thenCompose((v) -> {
-                        Book b = s.search(r.getTransactionContext(), r.getTitle());
-                        return Futures.completedFuture(new StoreSearchRep(b));
-                    });
+                    return Futures.completedFuture(new StoreSearchRep(b));
                 });
             });
 
@@ -83,22 +79,25 @@ public class DistributedObjectsRuntime {
                 return p.register(txCtxt, from, () -> {
                     Store s = (Store) objs.get(r.getObjId());
 
-                    int cartId = id.incrementAndGet();
-                    objs.put(cartId, s.newCart(txCtxt, r.getClientId()));
+                    return p.acquire(txCtxt, s).thenCompose((v) -> {
+                        int cartId = nextId.incrementAndGet();
+                        objs.put(cartId, s.newCart(txCtxt, r.getClientId()));
 
-                    return Futures.completedFuture(new StoreMakeCartRep(new ObjRef(cliqueId, cartId, "Cart")));
+                        return Futures.completedFuture(new StoreMakeCartRep(new ObjRef(cliqueId, cartId, "Cart")));
+                    });
                 });
             });
-
 
             c.handler(StoreGetOrderHistoryReq.class, (from, r) -> {
                 TransactionContext txCtxt = r.getTransactionContext();
 
                 return p.register(txCtxt, from, () -> {
                     Store s = (Store) objs.get(r.getObjId());
-                    SortedSet<Order> orderHistory = s.getOrderHistory(txCtxt, r.getClientId());
 
-                    return Futures.completedFuture(new StoreGetOrderHistoryRep(orderHistory));
+                    return p.acquire(txCtxt, s).thenCompose((v) -> {
+                        SortedSet<Order> orderHistory = s.getOrderHistory(txCtxt, r.getClientId());
+                        return Futures.completedFuture(new StoreGetOrderHistoryRep(orderHistory));
+                    });
                 });
             });
         });
@@ -124,9 +123,13 @@ public class DistributedObjectsRuntime {
                 return p.register(txCtxt, from, () -> {
                     Cart cart = (Cart) objs.get(r.getObjId());
                     Bank.Account srcAccount = (Bank.Account) objImport(r.getSrcAccountRef());
-                    Order o = cart.buy(txCtxt, srcAccount, r.getDescription());
+                    Store store = ((LocalStore.LocalCart) cart).getStore();
 
-                    return Futures.completedFuture(new CartBuyRep(o));
+                    // Locking the store is required for updating the orderHistory Map
+                    return p.acquire(txCtxt, store).thenCompose(v -> {
+                        Order o = cart.buy(txCtxt, srcAccount, r.getDescription());
+                        return Futures.completedFuture(new CartBuyRep(o));
+                    });
                 });
             });
 
@@ -177,9 +180,9 @@ public class DistributedObjectsRuntime {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    int accountId = id.incrementAndGet();
-
+                    int accountId = nextId.incrementAndGet();
                     objs.put(accountId, a);
+
                     return Futures.completedFuture(new BankGetAccountRep(new ObjRef(cliqueId, accountId, "Bank.Account")));
                 });
             });
@@ -206,8 +209,10 @@ public class DistributedObjectsRuntime {
                 return p.register(txCtxt, from, () -> {
                     Bank.Account a = (Bank.Account) objs.get(r.getObjId());
 
-                    a.credit(txCtxt, r.getAmount());
-                    return Futures.completedFuture(new AccountCreditRep());
+                    return p.acquire(txCtxt, a).thenCompose(v -> {
+                        a.credit(txCtxt, r.getAmount());
+                        return Futures.completedFuture(new AccountCreditRep());
+                    });
                 });
             });
 
@@ -217,8 +222,10 @@ public class DistributedObjectsRuntime {
                 return p.register(txCtxt, from, () -> {
                     Bank.Account a = (Bank.Account) objs.get(r.getObjId());
 
-                    a.debit(txCtxt, r.getAmount());
-                    return Futures.completedFuture(new AccountDebitRep());
+                    return p.acquire(txCtxt, a).thenCompose(v -> {
+                        a.debit(txCtxt, r.getAmount());
+                        return Futures.completedFuture(new AccountDebitRep());
+                    });
                 });
             });
 
@@ -227,7 +234,6 @@ public class DistributedObjectsRuntime {
 
                 return p.register(txCtxt, from, () -> {
                     Bank.Account a = (Bank.Account) objs.get(r.getObjId());
-
                     return Futures.completedFuture(new AccountGetNoRep(a.getNo(txCtxt)));
                 });
             });
@@ -238,7 +244,9 @@ public class DistributedObjectsRuntime {
                 return p.register(txCtxt, from, () -> {
                     Bank.Account a = (Bank.Account) objs.get(r.getObjId());
 
-                    return Futures.completedFuture(new AccountGetBalanceRep(a.getBalance(txCtxt)));
+                    return p.acquire(txCtxt, a).thenCompose(v ->
+                        Futures.completedFuture(new AccountGetBalanceRep(a.getBalance(txCtxt)))
+                    );
                 });
             });
 
@@ -248,7 +256,9 @@ public class DistributedObjectsRuntime {
                 return p.register(txCtxt, from, () -> {
                     Bank.Account a = (Bank.Account) objs.get(r.getObjId());
 
-                    return Futures.completedFuture(new AccountGetPaymentHistoryRep(a.getPaymentHistory(txCtxt)));
+                    return p.acquire(txCtxt, a).thenCompose(v ->
+                        Futures.completedFuture(new AccountGetPaymentHistoryRep(a.getPaymentHistory(txCtxt)))
+                    );
                 });
             });
 
@@ -259,18 +269,25 @@ public class DistributedObjectsRuntime {
                     Bank.Account srcAccount = (Bank.Account) objs.get(r.getObjId());
                     Bank.Account dstAccount = (Bank.Account) objImport(r.getDstRef());
 
-                    srcAccount.pay(txCtxt, r.getAmount(), r.getDescription(), dstAccount);
-                    return Futures.completedFuture(new AccountPayRep());
+                    return p.acquire(txCtxt, srcAccount).thenCompose(v ->
+                        p.acquire(txCtxt, dstAccount)
+                    ).thenCompose(v -> {
+                        srcAccount.pay(txCtxt, r.getAmount(), r.getDescription(), dstAccount);
+                        return Futures.completedFuture(new AccountPayRep());
+                    });
                 });
             });
         });
     }
 
     public ObjRef objExport(Object o){
-        int objid = this.id.incrementAndGet();
-        this.objs.put(objid, o);
+        int objId = this.nextId.incrementAndGet();
+        this.objs.put(objId, o);
+
         if (o instanceof Store)
-            return new ObjRef(cliqueId, objid, "Store");
+            return new ObjRef(cliqueId, objId, "Store");
+        else if (o instanceof Bank)
+            return new ObjRef(cliqueId, objId, "Bank");
         else
             return null;
     }
@@ -311,8 +328,7 @@ public class DistributedObjectsRuntime {
         return (TransactionContext) tc.execute(() -> c.sendAndReceive(COORDINATOR_ID, new Begin())).join().get();
     }
 
-    public Object commit(TransactionContext xContext) throws ExecutionException, InterruptedException {
-        return tc.execute(() -> c.sendAndReceive(COORDINATOR_ID, new Commit(xContext))).join().get();
+    public Object commit(TransactionContext txCtxt) throws ExecutionException, InterruptedException {
+        return tc.execute(() -> c.sendAndReceive(COORDINATOR_ID, new Commit(txCtxt))).join().get();
     }
-
 }
