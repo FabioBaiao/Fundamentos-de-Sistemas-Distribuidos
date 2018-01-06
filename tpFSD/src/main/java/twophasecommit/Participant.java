@@ -162,7 +162,8 @@ public class Participant {
         l.handler(CommitLog.class, (index, p) -> {
             TransactionChanges transaction = activeTransactions.get(p.getXid());
             if (transaction == null) {
-                // Não existir Prepared. Possível ??
+                // Não existir Prepared
+                // impossivel
             } else {
                 tc.execute(() -> {
                     c.send(0, new CommitedComm(p.getXid()));
@@ -175,7 +176,8 @@ public class Participant {
         l.handler(AbortLog.class, (index, p) -> {
             TransactionChanges transaction = activeTransactions.get(p.getXid());
             if (transaction == null) {
-                // Não existir Prepared. Possível ??
+                // Não existir Prepared.
+                // impossivel
             } else {
                 // recover initial status
                 // release locks of transaction

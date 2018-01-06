@@ -233,7 +233,8 @@ public class Coordinator {
             System.out.println("Log.PreparingLog found");
             TransactionInfo transaction = activeTransactions.get(p.getXid());
             if (transaction == null) {
-                // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o preparing ??
+                // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o preparing
+                // não fazer nada
             }
             else {
                 transaction.setPreparing();
@@ -245,7 +246,8 @@ public class Coordinator {
         l.handler(CommittingLog.class, (index, p) -> {
             TransactionInfo transaction = activeTransactions.get(p.getXid());
             if (transaction == null){
-                // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o committing ??
+                // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o committing
+                // não fazer nada
             }
             else {
                 transaction.setCommitting();
@@ -258,7 +260,8 @@ public class Coordinator {
             System.out.println("Log.CommitLog found");
             TransactionInfo transaction = activeTransactions.get(p.getXid());
             if (transaction == null) {
-                // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o commit ??
+                // quando apagou o log no final da rollback, conseguiu apagar o begin, mas não apagou o commit
+                // não fazer nada
             }
             else {
                 //removeTransaction(transaction);
@@ -270,7 +273,8 @@ public class Coordinator {
             System.out.println("Log.AbortLog found");
             TransactionInfo transaction = activeTransactions.get(p.getXid());
             if (transaction == null) {
-                // quando apagou o log no final da transação, conseguiu apagar o begin, mas não apagou o abort ??
+                // quando apagou o log no final da rollback, conseguiu apagar o begin, mas não apagou o abort
+                // não fazer nada
             }
             else {
                 removeTransaction(transaction);
@@ -306,7 +310,6 @@ public class Coordinator {
                 if (transaction == null) {
                     // Coordenador falhar depois de enviar commits, portanto vai reenvia-los
                     // Nunca acontece
-                    // DEPENDE DA IMPLEMENTAÇÃO NO PARTICIPANTE
                 }
                 else {
                     committed(transaction, from);
@@ -327,7 +330,8 @@ public class Coordinator {
         l.handler(ResourceLog.class, (index, p) -> {
             TransactionInfo transaction = activeTransactions.get(p.getXid());
             if (transaction == null){
-                // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o resourcelog ??
+                // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o resourcelog
+                // não fazer nada
             }
             else {
                 transaction.addParticipant(p.getParticipant());
