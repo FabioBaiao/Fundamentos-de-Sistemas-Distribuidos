@@ -5,9 +5,9 @@ import io.atomix.catalyst.concurrent.ThreadContext;
 import pt.haslab.ekit.Clique;
 import pt.haslab.ekit.Log;
 import twophasecommit.communication.*;
-import twophasecommit.logs.AbortLog;
-import twophasecommit.logs.CommitLog;
-import twophasecommit.logs.PreparedLog;
+import twophasecommit.logs.AbortMarker;
+import twophasecommit.logs.CommitMarker;
+import twophasecommit.logs.PreparedMarker;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -28,7 +28,7 @@ public class Participant {
         this.l = new Log("" + id);
         this.activeTransactions = new HashMap<>();
 
-        this.changes = new HashMap<>();
+        this.lockMap = new HashMap<>();
     }
 
     private CompletableFuture<Boolean> addResource(TransactionContext xContext, int client){
@@ -103,7 +103,7 @@ public class Participant {
                     try {
                         // adicionar objetos alterados
                         // adicionar objetos com lock
-                        l.append(new PreparedLog(transaction.getId(), transaction.getClient(), new ArrayList<>())).get();
+                        l.append(new PreparedMarker(transaction.getId(), transaction.getClient(), new ArrayList<>())).get();
                         transaction.status = TransactionChanges.Status.PREPARED;
 
                         c.send(from, new OkComm(recv.getXid()));
@@ -117,7 +117,7 @@ public class Participant {
                 if (activeTransactions.containsKey(recv.getXid())) {
                     try {
                         TransactionChanges transaction = activeTransactions.get(recv.getXid());
-                        l.append(new CommitLog(recv.getXid())).get();
+                        l.append(new CommitMarker(recv.getXid())).get();
 
                         c.send(from, new CommitedComm(recv.getXid()));
                         release(recv.getXid());
@@ -136,7 +136,7 @@ public class Participant {
             c.handler(RollbackComm.class, (from, recv) -> {
                 if (activeTransactions.containsKey(recv.getXid())) {
                     try {
-                        l.append(new AbortLog(recv.getXid())).get();
+                        l.append(new AbortMarker(recv.getXid())).get();
 
                         // recover initial status
                         release(recv.getXid());
@@ -150,7 +150,7 @@ public class Participant {
     }
 
     private void logHandlers() {
-        l.handler(PreparedLog.class, (index, p) -> {
+        l.handler(PreparedMarker.class, (index, p) -> {
             TransactionChanges transaction = new TransactionChanges(p.getXid(), p.getClient());
             activeTransactions.put(p.getXid(), transaction);
             transaction.status = TransactionChanges.Status.PREPARED;
@@ -159,7 +159,7 @@ public class Participant {
         });
 
 
-        l.handler(CommitLog.class, (index, p) -> {
+        l.handler(CommitMarker.class, (index, p) -> {
             TransactionChanges transaction = activeTransactions.get(p.getXid());
             if (transaction == null) {
                 // Não existir Prepared
@@ -173,7 +173,7 @@ public class Participant {
             }
         });
 
-        l.handler(AbortLog.class, (index, p) -> {
+        l.handler(AbortMarker.class, (index, p) -> {
             TransactionChanges transaction = activeTransactions.get(p.getXid());
             if (transaction == null) {
                 // Não existir Prepared.
@@ -186,14 +186,14 @@ public class Participant {
         });
     }
 
-    Map<Object, LockData> changes;
+    Map<Object, LockData> lockMap;
 
     public CompletableFuture<Void> acquire(TransactionContext xContext, Object o) {
-        LockData lock = changes.get(o);
+        LockData lock = lockMap.get(o);
         if (lock == null) {
             lock = new LockData(xContext.getXid());
             activeTransactions.get(xContext.getXid()).addChanged(o);
-            changes.put(o, lock);
+            lockMap.put(o, lock);
         }
 
         return lock.acquire(xContext.getXid());
@@ -202,9 +202,9 @@ public class Participant {
     public void release(int xid) {
         TransactionChanges transaction = activeTransactions.get(xid);
         for (Object o : transaction.getChanged()) {
-            LockData lock = changes.get(o);
+            LockData lock = lockMap.get(o);
             if(lock.release()) {
-                changes.remove(o);
+                lockMap.remove(o);
             }
         }
     }

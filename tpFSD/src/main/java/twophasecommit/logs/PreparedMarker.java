@@ -7,16 +7,16 @@ import io.atomix.catalyst.serializer.Serializer;
 
 import java.util.List;
 
-public class PreparedLog implements CatalystSerializable{
+public class PreparedMarker implements CatalystSerializable{
 
     private int xid;
     private List<Object> changes;
     private int client;
     // locks
 
-    public PreparedLog() {}
+    public PreparedMarker() {}
 
-    public PreparedLog(int xid, int client, List<Object> changes) {
+    public PreparedMarker(int xid, int client, List<Object> changes) {
         this.xid = xid;
         this.client = client;
         this.changes = changes;

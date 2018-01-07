@@ -2,45 +2,45 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e0cd916-e10b-4abe-8da3-b2b1fe865554" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountCreditRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountCreditRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountCreditReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountCreditReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountDebitRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountDebitRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountDebitReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountDebitReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetBalanceRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetBalanceRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetBalanceReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetBalanceReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetNoRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetNoRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetNoReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetNoReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetPaymentHistoryRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetPaymentHistoryRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetPaymentHistoryReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetPaymentHistoryReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountPayRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountPayRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/AccountPayReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountPayReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/Bank.java" afterPath="$PROJECT_DIR$/src/main/java/bank/Bank.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/BankGetAccountRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/BankGetAccountRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/BankGetAccountReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/BankGetAccountReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/BankGetNameRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/BankGetNameRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/BankGetNameReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/BankGetNameReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/LocalBank.java" afterPath="$PROJECT_DIR$/src/main/java/bank/LocalBank.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/Payment.java" afterPath="$PROJECT_DIR$/src/main/java/bank/Payment.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bank/RemoteBank.java" afterPath="$PROJECT_DIR$/src/main/java/bank/RemoteBank.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartAddRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartAddRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartAddReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartAddReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartBuyRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartBuyRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartBuyReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartBuyReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartClearRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartClearRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartClearReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartClearReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartGetContentRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartGetContentRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartGetContentReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartGetContentReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartRemoveRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartRemoveRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartRemoveReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartRemoveReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreGetOrderHistoryRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreGetOrderHistoryRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreGetOrderHistoryReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreGetOrderHistoryReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreMakeCartRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreMakeCartRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreMakeCartReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreMakeCartReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreSearchRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreSearchRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreSearchReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreSearchReq.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/common/Rep.java" afterPath="$PROJECT_DIR$/src/main/java/common/AbstractRep.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/common/Req.java" afterPath="$PROJECT_DIR$/src/main/java/common/AbstractReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartGetContentRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartGetContentRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreSearchReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreSearchReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartAddRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartAddRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartRemoveReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartRemoveReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreMakeCartReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreMakeCartReq.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/common/Rep.java" afterPath="$PROJECT_DIR$/src/main/java/common/AbstractRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartGetContentReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartGetContentReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/BankGetNameRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/BankGetNameRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/Bank.java" afterPath="$PROJECT_DIR$/src/main/java/bank/Bank.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartBuyRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartBuyRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetNoRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetNoRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartClearRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartClearRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/BankGetAccountReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/BankGetAccountReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetBalanceRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetBalanceRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountDebitRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountDebitRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountPayRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountPayRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreGetOrderHistoryRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreGetOrderHistoryRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountDebitReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountDebitReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/LocalBank.java" afterPath="$PROJECT_DIR$/src/main/java/bank/LocalBank.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartBuyReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartBuyReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetBalanceReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetBalanceReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountCreditReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountCreditReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartClearReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartClearReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetNoReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetNoReq.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/common/Req.java" afterPath="$PROJECT_DIR$/src/main/java/common/AbstractReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountPayReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountPayReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartRemoveRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartRemoveRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetPaymentHistoryReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetPaymentHistoryReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/Payment.java" afterPath="$PROJECT_DIR$/src/main/java/bank/Payment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/BankGetAccountRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/BankGetAccountRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreSearchRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreSearchRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/CartAddReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/CartAddReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreMakeCartRep.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreMakeCartRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountCreditRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountCreditRep.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bookstore/StoreGetOrderHistoryReq.java" afterPath="$PROJECT_DIR$/src/main/java/bookstore/StoreGetOrderHistoryReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/BankGetNameReq.java" afterPath="$PROJECT_DIR$/src/main/java/bank/BankGetNameReq.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/RemoteBank.java" afterPath="$PROJECT_DIR$/src/main/java/bank/RemoteBank.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/bank/AccountGetPaymentHistoryRep.java" afterPath="$PROJECT_DIR$/src/main/java/bank/AccountGetPaymentHistoryRep.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -52,7 +52,58 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="Participant.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/twophasecommit/Participant.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="30" column="20" lean-forward="false" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Client.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="20" column="106" lean-forward="false" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="106" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StoreServer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/StoreServer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="480">
+              <caret line="49" column="33" lean-forward="false" selection-start-line="49" selection-start-column="12" selection-end-line="49" selection-end-column="33" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Coordinator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/twophasecommit/Coordinator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="298">
+              <caret line="174" column="17" lean-forward="false" selection-start-line="174" selection-start-column="17" selection-end-line="174" selection-end-column="17" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DistributedObjectsRuntime.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/common/DistributedObjectsRuntime.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="48">
+              <caret line="287" column="56" lean-forward="false" selection-start-line="287" selection-start-column="56" selection-end-line="287" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -115,12 +166,12 @@
         <option value="$PROJECT_DIR$/src/main/java/common/Common.java" />
         <option value="$PROJECT_DIR$/src/main/java/common/DistributedObjectsRuntime.java" />
         <option value="$PROJECT_DIR$/src/main/java/twophasecommit/Coordinator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/twophasecommit/Participant.java" />
         <option value="$PROJECT_DIR$/src/main/java/bank/Payment.java" />
         <option value="$PROJECT_DIR$/src/main/java/bank/AccountGetPaymentHistoryRep.java" />
         <option value="$PROJECT_DIR$/src/main/java/bank/LocalBank.java" />
         <option value="$PROJECT_DIR$/src/main/java/bank/Bank.java" />
         <option value="$PROJECT_DIR$/src/main/java/bank/RemoteBank.java" />
+        <option value="$PROJECT_DIR$/src/main/java/twophasecommit/Participant.java" />
       </list>
     </option>
   </component>
@@ -158,7 +209,20 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView">
+        <subPane>
+          <expand>
+            <path>
+              <item name="tpFSD" type="1abcf292:AndroidViewProjectNode" />
+              <item name="tpFSD" type="1039202d:NonAndroidModuleNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -184,18 +248,22 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="AndroidView">
-        <subPane>
-          <expand>
             <path>
-              <item name="tpFSD" type="1abcf292:AndroidViewProjectNode" />
-              <item name="tpFSD" type="1039202d:NonAndroidModuleNode" />
+              <item name="tpFSD" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tpFSD" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="twophasecommit" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tpFSD" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tpFSD" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="twophasecommit" type="462c0819:PsiDirectoryNode" />
+              <item name="logs" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -230,13 +298,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Application.Coordinator">
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <module />
-    </configuration>
     <configuration name="BankServer" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="BankServer" />
@@ -293,6 +354,13 @@
       <module name="tpFSD" />
       <envs />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" />
@@ -326,6 +394,12 @@
       </option>
       <envs />
       <patterns />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
     </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
@@ -361,12 +435,6 @@
       <properties />
       <listeners />
     </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" />
-      <predefined_log_file id="idea.log" enabled="true" />
-    </configuration>
     <list size="4">
       <item index="0" class="java.lang.String" itemvalue="Application.Coordinator" />
       <item index="1" class="java.lang.String" itemvalue="Application.BankServer" />
@@ -396,34 +464,54 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="821" extended-state="6" />
+    <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32982087" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30769232" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32982087" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18672423" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32982087" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32843792" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24930556" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32982087" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24930556" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -442,43 +530,30 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="28" column="39" lean-forward="false" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/StoreServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="37" column="39" lean-forward="false" selection-start-line="37" selection-start-column="39" selection-end-line="37" selection-end-column="39" />
+        <state relative-caret-position="480">
+          <caret line="49" column="33" lean-forward="false" selection-start-line="49" selection-start-column="12" selection-end-line="49" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+        <state relative-caret-position="198">
+          <caret line="20" column="106" lean-forward="false" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="106" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/twophasecommit/Coordinator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1144">
-          <caret line="311" column="37" lean-forward="true" selection-start-line="311" selection-start-column="37" selection-end-line="311" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/twophasecommit/Participant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2655">
-          <caret line="177" column="19" lean-forward="false" selection-start-line="177" selection-start-column="19" selection-end-line="177" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="298">
+          <caret line="174" column="17" lean-forward="false" selection-start-line="174" selection-start-column="17" selection-end-line="174" selection-end-column="17" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -486,7 +561,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -494,7 +568,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -502,7 +575,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -510,7 +582,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -518,7 +589,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -526,7 +596,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -534,7 +603,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -542,7 +610,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -550,7 +617,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -558,7 +624,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -566,7 +631,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="10" lean-forward="false" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -574,7 +638,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-57">
           <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -582,9 +645,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="17" lean-forward="false" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -592,7 +652,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="12" column="17" lean-forward="false" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -600,7 +659,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="11" column="17" lean-forward="false" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -608,7 +666,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="19" column="9" lean-forward="true" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -616,7 +673,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -624,13 +680,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="17" lean-forward="false" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#487#488#0" expanded="true" />
-            <element signature="e#524#525#0" expanded="true" />
-            <element signature="e#708#709#0" expanded="true" />
-            <element signature="e#730#731#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -638,12 +687,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding>
-            <element signature="e#541#542#0" expanded="true" />
-            <element signature="e#566#567#0" expanded="true" />
-            <element signature="e#965#966#0" expanded="true" />
-            <element signature="e#1014#1015#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -651,7 +694,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="20" lean-forward="false" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -667,7 +709,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="7" column="17" lean-forward="false" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -675,7 +716,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -683,7 +723,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -691,7 +730,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -699,7 +737,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -707,7 +744,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -715,7 +751,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -723,7 +758,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -731,7 +765,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -739,7 +772,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -747,7 +779,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -763,7 +794,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="13" column="45" lean-forward="false" selection-start-line="13" selection-start-column="45" selection-end-line="13" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -771,7 +801,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -779,7 +808,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -787,7 +815,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -795,7 +822,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -803,7 +829,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -811,7 +836,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="6" column="17" lean-forward="false" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -827,7 +851,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="27">
           <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -835,7 +858,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -849,8 +871,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/common/DistributedObjectsRuntime.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4035">
-          <caret line="287" column="56" lean-forward="true" selection-start-line="287" selection-start-column="56" selection-end-line="287" selection-end-column="56" />
+        <state relative-caret-position="48">
+          <caret line="287" column="56" lean-forward="false" selection-start-line="287" selection-start-column="56" selection-end-line="287" selection-end-column="56" />
           <folding />
         </state>
       </provider>
@@ -859,6 +881,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="109" column="5" lean-forward="true" selection-start-line="109" selection-start-column="5" selection-end-line="109" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/twophasecommit/Participant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="30" column="20" lean-forward="false" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
           <folding />
         </state>
       </provider>

@@ -111,13 +111,13 @@ public class Common {
 
     private static void registerLogs(ThreadContext tc) {
         tc.serializer()
-                .register(AbortLog.class)
-                .register(BeginLog.class)
-                .register(CommitLog.class)
-                .register(CommittingLog.class)
-                .register(PreparedLog.class)
-                .register(PreparingLog.class)
-                .register(ResourceLog.class);
+                .register(AbortMarker.class)
+                .register(BeginMarker.class)
+                .register(CommitMarker.class)
+                .register(CommittingMarker.class)
+                .register(PreparedMarker.class)
+                .register(PreparingMarker.class)
+                .register(ResourceMarker.class);
 
     }
 }

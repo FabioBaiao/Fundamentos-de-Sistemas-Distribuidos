@@ -5,13 +5,15 @@ import io.atomix.catalyst.buffer.BufferOutput;
 import io.atomix.catalyst.serializer.CatalystSerializable;
 import io.atomix.catalyst.serializer.Serializer;
 
-public class AbortLog implements CatalystSerializable{
+import java.util.List;
+
+public class PreparingMarker implements CatalystSerializable {
 
     private int xid;
 
-    public AbortLog(){}
+    public PreparingMarker() {}
 
-    public AbortLog(int xid) {
+    public PreparingMarker(int xid) {
         this.xid = xid;
     }
 

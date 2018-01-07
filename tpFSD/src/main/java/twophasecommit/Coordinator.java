@@ -86,7 +86,7 @@ public class Coordinator {
         TransactionInfo transaction = new TransactionInfo(xid, client);
 
         try {
-            int index = l.append(new BeginLog(xid, client)).get();
+            int index = l.append(new BeginMarker(xid, client)).get();
 
             addIndex(transaction, index);
 
@@ -112,7 +112,7 @@ public class Coordinator {
 
     private void addParticipant(TransactionInfo transaction, int participant) {
         try {
-            int index = l.append(new ResourceLog(transaction.getId(), participant)).get();
+            int index = l.append(new ResourceMarker(transaction.getId(), participant)).get();
 
             addIndex(transaction, index);
 
@@ -125,7 +125,7 @@ public class Coordinator {
 
     private void prepare(TransactionInfo transaction) {
         try {
-            int index = l.append(new PreparingLog(transaction.getId())).get();
+            int index = l.append(new PreparingMarker(transaction.getId())).get();
 
             addIndex(transaction, index);
         } catch (InterruptedException | ExecutionException e) {
@@ -154,7 +154,7 @@ public class Coordinator {
     private void commit(TransactionInfo transaction) {
 
         try {
-            int index = l.append(new CommittingLog(transaction.getId())).get();
+            int index = l.append(new CommittingMarker(transaction.getId())).get();
 
             addIndex(transaction, index);
 
@@ -176,7 +176,7 @@ public class Coordinator {
         transaction.addCommitted(from);
         if (transaction.allCommitted()) {
             try {
-                l.append(new CommitLog(transaction.getId())).get();
+                l.append(new CommitMarker(transaction.getId())).get();
 
                 //removeTransaction(transaction);
                 transaction.setCommitted();
@@ -191,7 +191,7 @@ public class Coordinator {
 
     private void rollback(TransactionInfo transaction) {
         try {
-            l.append(new AbortLog(transaction.getId())).get();
+            l.append(new AbortMarker(transaction.getId())).get();
 
             for (int i : transaction.getParticipants()) {
                 sendRollback(i, transaction.getId());
@@ -229,8 +229,8 @@ public class Coordinator {
 
     private void twoPhaseCommitLogHandlers() {
 
-        l.handler(PreparingLog.class, (index, p) -> {
-            System.out.println("Log.PreparingLog found");
+        l.handler(PreparingMarker.class, (index, p) -> {
+            System.out.println("Log.PreparingMarker found");
             TransactionInfo transaction = activeTransactions.get(p.getXid());
             if (transaction == null) {
                 // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o preparing
@@ -243,7 +243,7 @@ public class Coordinator {
             }
         });
 
-        l.handler(CommittingLog.class, (index, p) -> {
+        l.handler(CommittingMarker.class, (index, p) -> {
             TransactionInfo transaction = activeTransactions.get(p.getXid());
             if (transaction == null){
                 // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o committing
@@ -256,8 +256,8 @@ public class Coordinator {
             }
         });
 
-        l.handler(CommitLog.class, (index, p) -> {
-            System.out.println("Log.CommitLog found");
+        l.handler(CommitMarker.class, (index, p) -> {
+            System.out.println("Log.CommitMarker found");
             TransactionInfo transaction = activeTransactions.get(p.getXid());
             if (transaction == null) {
                 // quando apagou o log no final da rollback, conseguiu apagar o begin, mas não apagou o commit
@@ -269,8 +269,8 @@ public class Coordinator {
             }
         });
 
-        l.handler(AbortLog.class, (index, p) -> {
-            System.out.println("Log.AbortLog found");
+        l.handler(AbortMarker.class, (index, p) -> {
+            System.out.println("Log.AbortMarker found");
             TransactionInfo transaction = activeTransactions.get(p.getXid());
             if (transaction == null) {
                 // quando apagou o log no final da rollback, conseguiu apagar o begin, mas não apagou o abort
@@ -320,14 +320,14 @@ public class Coordinator {
 
     private void rpcLogHandlers() {
 
-        l.handler(BeginLog.class, (index, p) -> {
+        l.handler(BeginMarker.class, (index, p) -> {
             TransactionInfo transaction = new TransactionInfo(p.getXid(), p.getClient());
             activeTransactions.put(p.getXid(), transaction);
 
             addIndex(transaction, index);
         });
 
-        l.handler(ResourceLog.class, (index, p) -> {
+        l.handler(ResourceMarker.class, (index, p) -> {
             TransactionInfo transaction = activeTransactions.get(p.getXid());
             if (transaction == null){
                 // quando apagou o log no final do rollback, conseguiu apagar o begin, mas não apagou o resourcelog
@@ -376,7 +376,7 @@ public class Coordinator {
                 }
                 else if (transaction.getParticipants().size() == 0) {
                     try {
-                        l.append(new CommitLog(transaction.getId())).get();
+                        l.append(new CommitMarker(transaction.getId())).get();
                         //removeTransaction(transaction);
                         transaction.setCommitted();
                     } catch (InterruptedException | ExecutionException e) {
